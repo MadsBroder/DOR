@@ -1,0 +1,59 @@
+Section,Group,ID,Pro,Trigger,InitiativeName,Description,RequestedAmount,RequestType,RowID
+Functional,GEHS,9,9,Legal Compliance,EHS legal Compliance project,"Ertesa License for continued roll out and for implemented 2025 scope of countries",2200,OPEX,func-9
+Functional,GQ,31,31,Functional Strategy Deployment & Must Win Battles,Quality Academy (AI),"Articulate Rise AI training creator 1500 USD/year. Synthesia license.",10,OPEX,func-31
+Functional,GSC,123,123,Strategic Bet,Feasibility Strategy Allentown,"+ 10.000 euro for OIS planning tool from Service",75,CAPEX,func-123
+Functional,GSC,68,68,End of Life (EOL),Reporting and BW --> SAC,"Extended consultant... BI - GSC Part",1500,CAPEX,func-68
+Functional,GSC,39,39,Continued initiative approved last year,Agile VPC - process mining continuation and expansion,PLC in Product Information in Group Supply chain,300,OPEX,func-39
+Functional,GSC,89,89,Continued initiative approved last year,Strategic Planning Process - Capacity planning tool into SAP IBP,"Implement Consulting Group. SAP IBP Strategic Planning implementation. We have the license already, so No new license fees.",500,CAPEX,func-89
+Functional,GP,69,69,Strategic Bet,Risk Assessment - Everstream,One-time implementation fee,895,CAPEX,func-69
+Functional,GP,70,70,Strategic Bet,SAP continuation,"Subscription 5.4M DKK. Other IS cost 0.2M DKK",5600,OPEX,func-70
+Functional,GAME,121,121,Legal Compliance,OT Security & NIS2,"Compliance support, Introducing tools. Hardware setup (test and verification), Deploy backup and recovery system, Training towards divisions",1200,OPEX,func-121
+Functional,GAME,62,62,End of Life (EOL),BW --> SAC transformation,External consultants to support the transition,300,OPEX,func-62
+Functional,GAME,119,119,Continued initiative approved last year,Traceability implementation in Divisions,Support of solution roll-out,300,OPEX,func-119
+Functional,GAME,99,99,Digital Operations Priority (short term impact),Al/ML Monitoring Tool,In order to keep the catalogue active and running.,50,OPEX,func-99
+Functional,GAME,118,118,Digital Operations Priority (short term impact),AI powered MES data insight,"Support, Maintenance of solution. Technical support, Updates",300,OPEX,func-118
+Functional,GAME,41,41,Digital Operations Priority (Long term impact),Grundfos Equipment Engineering Standard for Connectivity interface,"Implement standard interfaces to a new equipment, build interfaces for both PLC, connectivity, provide data transfer between production line and other digital systems like MES, traceability, other data solutions.",200,CAPEX,func-41
+Functional,GROUP OPS,44,44,Continued initiative approved last year,Smart Performance Management full out,"Budget transfer for 1 Senior BI Developer in DDC - based on IS ProjX",800,OPEX,func-44
+Functional,GROUP OPS,39,39,Continued initiative approved last year,Agile VPC - process mining continuation and expansion,"Celonis Quality Management Module. Scope: SAP QM related data 62.500€ / year",470,OPEX,func-39-2
+Other,COO,140,140,End of Life (EOL),Transportation Management,According to strategic bet slide,8400,CAPEX,other-140-1
+Other,COO,140,140,End of Life (EOL),Transportation Management,As per strategic bet slide,3000,OPEX,other-140-2
+Other,COO,107,107,Strategic Bet,One Integrated Management system - Tool selection,One MES,1000,CAPEX,other-107
+Other,COO,109,109,Strategic Bet,MES,"Development of the platform incl. new features to further impact production lines. Central team to manage, support and develop platform.",15000,OPEX,other-109
+Other,COO,144,144,End of Life (EOL),Extended Warehouse Management (End of life),Internal IS resources,7000,CAPEX,other-144
+Other,COO,114,114,End of Life (EOL),Ariba Forecasting & Inventory,External consultancy,2500,OPEX,other-114-1
+Other,COO,114,114,End of Life (EOL),Ariba Forecasting & Inventory,"Subscription for Ariba Forecasting & Inventory. After Ariba forecasting & inventory implementation, there is an expected saving of 0.5 million DKK when closing DNC",3500,OPEX,other-114-2
+Other,COO,42,42,Legal Compliance,GTS CORE development (Compliance - Products Regulations),"BPOG Funding for External supplier (CIM), 2000 hours converted to cost",1200,OPEX,other-42
+Other,INNOVATION POOL,37,37,Digital Operations Priority (short term impact),AI embedded QIP system,"License fee for AI solution to be included on the QIP.",300,OPEX,other-37-1
+Other,INNOVATION POOL,63,63,Digital Operations Priority (Long term impact),Optix Connectivity Platform,"Optix Medium license subscription. Optix Small license subscription. License Packages: 5xmedium + 10xsmall. Hardware HW Medium (ex. Prick2Light) + HW Small (Ex. sensors). Covering 5 medium sized and 10 small sized projects.",650,OPEX,other-63
+Other,INVESTMENT POOLS,168,168,Strategic Bet,Global Operations Footprint,"(5 hours from PM, MM, PP, LE, SD, Prod IT, MDM",2000,OPEX,other-168
+Divisional,CBS,193,19,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),CBS,1000,CAPEX,div-193-1
+Divisional,CBS,115,39,Continued initiative approved last year,X-plck 2026 Implementation (Changshu, Sunderland & Fresno DBS),Changshu CBS) 10 User Licenses,34,OPEX,div-115-1
+Divisional,CBS,115,39,Continued initiative approved last year,X-plck 2026 Implementation (Changshu, Sunderland & Fresno DBS),"X-Plck to Changshu (CBS) Deployment and Product pictures. Hardware 4 Sets.",471,CAPEX,div-115-2
+Divisional,CBS,115,39,Continued initiative approved last year,X-plck 2026 Implementation (Changshu, Sunderland & Fresno DBS),"X-Plck to Sunderland (CBS) Deployment and Product pictures. Hardware 4 Sets.",280,CAPEX,div-115-3
+Divisional,CBS,105,29,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,"The no of investment should be financed by the factory where the implementation will be done.",500,CAPEX,div-105-1
+Divisional,CBS,146,38,Digital Operations Priority (short term impact),GCE SSP,"DC for staging out of GCE",500,OPEX,div-146
+Divisional,DBS,193,19,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),DBS,1000,CAPEX,div-193-2
+Divisional,DBS,115,39,Continued initiative approved last year,X-plck 2026 Implementation (Changshu, Sunderland & Fresno DBS),Fresno DBS - 4 User Licenses,26,OPEX,div-115-4
+Divisional,DBS,115,39,Continued initiative approved last year,X-plck 2026 Implementation (Changshu, Sunderland & Fresno DBS),"X-Plck to Fresno (DBS) Deployment and Product pictures. Hardware 4 Sets.",193,CAPEX,div-115-5
+Divisional,DBS,105,29,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,"The no of investment should be financed by the factory where the implementation will be done.",500,CAPEX,div-105-2
+Divisional,DBS,31,98,Continued initiative approved last year,AI/AA Manufacturing Pool,"All divisions are open to request our solutions. The value represents development and setup",250,OPEX,div-31
+Divisional,IND,193,19,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),IND,1000,CAPEX,div-193-3
+Divisional,IND,105,29,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,"The no of investment should be financed by the factory where the implementation will be done.",500,CAPEX,div-105-3
+Divisional,WU,193,19,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),WU,1000,CAPEX,div-193-4
+Divisional,WU,105,29,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,"The no of investment should be financed by the factory where the implementation will be done.",500,CAPEX,div-105-4
+Divisional,WU,196,40,Functional Strategy Deployment & Must Win,New Zealand / Auckland Warehouse,IS Estimates,1000,CAPEX,div-196
+Divisional,GROUP COMP,193,19,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),Group Components,4000,CAPEX,div-193-5
+Divisional,GROUP COMP,105,29,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,"The no of investment should be financed by the factory where the implementation will be done.",500,CAPEX,div-105-5
+BPOG,BPOG,144,N/A,N/A,Extended Warehouse Management (End of life),"Internal IS hours (WM, ABAP, MM, PM, LE, QM, FI)",7000,BPOG,bpog-144
+BPOG,BPOG,140,N/A,N/A,Transportation Management,"IS hours (LE, MM, PI, FI, ABAP)",6500,BPOG,bpog-140
+BPOG,BPOG,114,N/A,N/A,Ariba Forecasting & Inventory,Needed internal IS resources,1700,BPOG,bpog-114
+BPOG,BPOG,123,N/A,N/A,Feasibility Strategy Allentown,"900 IS hours + 10.000 euro for OIS planning tool from Service",900,BPOG,bpog-123
+BPOG,BPOG,66,N/A,N/A,AI in Planning,"To support creating the infostructure -Make data available in cloud solution from our SAP systems -Make AI result possible to 'download' to SAP -Reporting to track impact (BW or SAC). Reduced scope 100hours to 850 21-08-2025",850,BPOG,bpog-66
+BPOG,BPOG,109,N/A,N/A,Advanced ATP checks used in order management process,"Operations. OTC Process Management",450,BPOG,bpog-109
+BPOG,BPOG,117,N/A,N/A,Order To Cash - CI via BPM,"across several areas in IS incl. other BPOGs. Reduced from 100 to 400 21-08-2025. 'Agreed to reprioritise to lower scope and content of project'",400,BPOG,bpog-117
+BPOG,BPOG,143,N/A,N/A,Dangerous goods,IS hours to activate and implement a standard process for DG,400,BPOG,bpog-143
+BPOG,BPOG,108,N/A,N/A,Order Prioritization Supply Chain Constraint Process,"OTC Process Management. Operations",350,BPOG,bpog-108
+BPOG,BPOG,87,N/A,N/A,Supply Chain Network Design Data Product,"System integration and potential data pipeline. Reduced from 1200 hours to 300 21-08-2025. 'Lowered scope, as expectations has changed to be able to do more with existing solutions'",300,BPOG,bpog-87
+BPOG,BPOG,68,N/A,N/A,Reporting and BW --> SAC,Building of new reporting requirements and ensuring data pipelines to snowflake,250,BPOG,bpog-68
+BPOG,BPOG,89,N/A,N/A,Strategic Planning Process - Capacity planning tool into SAP IBP,"Grundfos IS is needed for internal coordination, system set-up validation, as 'build resource' to be able to maintain and develop the tool in the future.",200,BPOG,bpog-89
+BPOG,BPOG,146,N/A,N/A,GCE SSP,,0,BPOG,bpog-146
