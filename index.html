@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Changed to UTF-8 for better compatibility -->
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Funding Allocation Feedback</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a professional look */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Style for the <details> summary arrow */
+        summary {
+            list-style: none;
+            cursor: pointer;
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        summary::before {
+            content: '►';
+            margin-right: 0.5rem;
+            font-size: 0.8em;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        /* Group header row */
+        .group-header {
+            position: sticky;
+            top: 0; /* Adjust this if you have a sticky navbar */
+            z-index: 10;
+        }
+
+        /* Active button states */
+        .btn-group .btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .btn-group .btn-full.active {
+            background-color: #16a34a; /* green-600 */
+        }
+        .btn-group .btn-none.active {
+            background-color: #dc2626; /* red-600 */
+        }
+        .btn-group .btn-adj.active {
+            background-color: #eab308; /* yellow-500 */
+            color: #1f2937; /* gray-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container max-w-7xl mx-auto p-6 md:p-10 bg-white rounded-lg shadow-2xl mt-8 mb-8">
+
+        <!-- Header -->
+        <header class="border-b pb-4 mb-6">
+            <h1 class="text-3xl font-bold text-blue-800">Digital Operations Roadmap</h1>
+            <p class="text-xl text-gray-600">Funding Allocation Feedback</p>
+        </header>
+
+        <!-- Instructions -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm text-blue-700">
+            <p><strong>Instructions:</strong> For each initiative, please provide the allocation status.
+                <br>
+                <span class="inline-block px-2 py-0.5 bg-green-200 text-green-800 rounded-full mt-1">Allocated in full</span> = The full requested amount was approved.
+                <br>
+                <span class="inline-block px-2 py-0.5 bg-red-200 text-red-800 rounded-full mt-1">No allocation</span> = The request was not approved.
+                <br>
+                <span class="inline-block px-2 py-0.5 bg-yellow-200 text-yellow-800 rounded-full mt-1">Adjusted allocation</span> = A different amount was approved. An input box will appear to enter the new amount.
+            </p>
+            <p class="mt-2">Your progress is saved in your browser. Use the <strong>Save Progress</strong> button to manually save. Use <strong>Clear All Input</strong> to reset the form.</p>
+            <p class="mt-2 font-semibold">Note: This page loads data from `funding_data.csv` located in your GitHub repository. If data fails to load, ensure the file is at the correct URL.</p>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+
+            <!-- Section 1: Functional Funding Request -->
+            <details class="mb-4" open>
+                <summary class="text-2xl font-semibold text-gray-800 cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                    Functional Funding Requests
+                </summary>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Group</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pro</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                </tr>
+                            </thead>
+                            <!-- Body will be populated by JavaScript -->
+                            <tbody id="functional-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Example of loading state -->
+                                <tr>
+                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading functional data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Section 2: Divisional Funding Request (Moved up) -->
+            <details class="mb-4" open>
+                <summary class="text-2xl font-semibold text-gray-800 cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                    Divisional Funding Requests
+                </summary>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Group</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pro</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                </tr>
+                            </thead>
+                            <!-- Body will be populated by JavaScript -->
+                            <tbody id="divisional-tbody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading divisional data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </details>
+            
+            <!-- Section 3: Other Funding Request (Moved down) -->
+            <details class="mb-4" open>
+                <summary class="text-2xl font-semibold text-gray-800 cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                    Other Funding Requests
+                </summary>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Group</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pro</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                </tr>
+                            </thead>
+                            <!-- Body will be populated by JavaScript -->
+                            <tbody id="other-tbody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading other data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Section 4: Data Insights - BPOG -->
+            <details class="mb-4" open>
+                <summary class="text-2xl font-semibold text-gray-800 cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                    Data Insights - BPOG
+                </summary>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (BPOG Hours)</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                </tr>
+                            </thead>
+                            <!-- Body will be populated by JavaScript -->
+                            <tbody id="bpog-tbody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="4" class="p-6 text-center text-gray-500">Loading BPOG data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </details>
+
+        </main>
+
+        <!-- Footer / Export Button -->
+        <footer class="mt-8 pt-6 border-t flex flex-col md:flex-row items-center justify-center gap-4">
+            <button id="saveBtn" class="px-6 py-2 bg-green-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-700 transition w-full md:w-auto">
+                Save Progress
+            </button>
+            <button id="exportBtn" class="px-6 py-2 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 transition w-full md:w-auto">
+                Download CSV Export
+            </button>
+            <button id="clearBtn" class="px-6 py-2 bg-red-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-red-700 transition w-full md:w-auto">
+                Clear All Input
+            </button>
+        </footer>
+
+    </div>
+
+    <!-- Clear Confirmation Modal -->
+    <div id="clearModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Are you sure?</h3>
+            <p class="text-gray-600 mb-6">This will clear all saved progress from your browser. This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelClear" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button id="confirmClear" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Clear All Input</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-5 py-3 rounded-lg shadow-xl transition-all duration-300 ease-in-out translate-x-[120%] z-40">
+        Progress saved!
+    </div>
+
+
+    <script>
+        // --- DATA LOADING AND RENDERING ---
+
+        const csvUrl = 'https://raw.githubusercontent.com/MadsBroder/DOR/main/funding_data.csv'; // Fetches the raw CSV from your GitHub repo.
+        // If your repo or branch is different, you MUST update this URL.
+        // Example: https://raw.githubusercontent.com/USERNAME/REPONAME/BRANCHNAME/funding_data.csv
+
+        /**
+         * Simple CSV parser
+         * @param {string} csvText - The raw CSV text.
+         * @returns {Array<Object>} An array of objects.
+         */
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(','); // Simple split, assumes no commas in values
+                // More robust parser to handle commas inside quotes:
+                const regex = /(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)/g;
+                let match;
+                let j = 0;
+                const obj = {};
+                while (match = regex.exec(lines[i])) {
+                    let value = match[1].trim();
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1).replace(/""/g, '"'); // Handle escaped quotes
+                    }
+                    obj[headers[j]] = value;
+                    j++;
+                }
+                if (Object.keys(obj).length === headers.length) {
+                    data.push(obj);
+                }
+            }
+            return data;
+        }
+
+        /**
+         * Fetches and renders all data from the CSV.
+         */
+        async function loadDataFromCSV() {
+            try {
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch CSV: ${response.statusText}`);
+                }
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                renderTables(data);
+                
+                // Now that tables are rendered, load any saved progress
+                loadProgress();
+
+            } catch (error) {
+                console.error("Error loading CSV data:", error);
+                // Display error in all tables
+                document.getElementById('functional-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data from ${csvUrl}.</td></tr>`;
+                document.getElementById('divisional-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
+                document.getElementById('other-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
+                document.getElementById('bpog-tbody').innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
+            }
+        }
+
+        /**
+         * Populates all tables from the parsed data.
+         * @param {Array<Object>} data - Array of row objects from CSV.
+         */
+        function renderTables(data) {
+            const tbodies = {
+                Functional: document.getElementById('functional-tbody'),
+                Divisional: document.getElementById('divisional-tbody'),
+                Other: document.getElementById('other-tbody'),
+                BPOG: document.getElementById('bpog-tbody')
+            };
+
+            // Clear loading messages
+            for (const key in tbodies) {
+                tbodies[key].innerHTML = '';
+            }
+
+            let currentGroups = { Functional: null, Divisional: null, Other: null };
+
+            data.forEach(rowData => {
+                const { Section, Group } = rowData;
+                const tbody = tbodies[Section];
+                if (!tbody) return; // Skip if section is unknown
+
+                // Handle BPOG table separately
+                if (Section === 'BPOG') {
+                    const tr = createBpogDataRow(rowData);
+                    tbody.appendChild(tr);
+                    return;
+                }
+
+                // Handle other tables
+                // Add group header row if the group changes
+                if (currentGroups[Section] !== Group) {
+                    currentGroups[Section] = Group;
+                    const groupHeader = createGroupHeaderRow(Group, 7, Section === 'Functional' ? 'Function' : 'Division');
+                    tbody.appendChild(groupHeader);
+                }
+
+                const tr = createDataRow(rowData);
+                tbody.appendChild(tr);
+            });
+        }
+
+        /**
+         * Creates a sticky group header row.
+         * @param {string} groupName - The name of the group (e.g., "GEHS", "CBS").
+         * @param {number} colSpan - The number of columns to span.
+         * @param {string} type - The type prefix (e.g., "Function", "Division").
+         * @returns {HTMLElement} The created <tr> element.
+         */
+        function createGroupHeaderRow(groupName, colSpan, type) {
+            const tr = document.createElement('tr');
+            tr.className = 'group-header bg-gray-200';
+            tr.innerHTML = `<td colspan="${colSpan}" class="px-3 py-2 text-sm font-semibold text-gray-900">${type}: ${groupName}</td>`;
+            return tr;
+        }
+
+        /**
+         * Creates a table row for Functional, Divisional, or Other data.
+         * @param {Object} rowData - The object for a single row.
+         * @returns {HTMLElement} The created <tr> element.
+         */
+        function createDataRow(rowData) {
+            const { Group, ID, Pro, Trigger, InitiativeName, Description, RequestedAmount, RequestType, RowID } = rowData;
+            
+            const tr = document.createElement('tr');
+            // Set all data attributes for later use
+            tr.dataset.rowId = RowID;
+            tr.dataset.group = Group;
+            tr.dataset.pro = Pro;
+            tr.dataset.trigger = Trigger;
+            tr.dataset.description = Description;
+
+            // Format requested amount
+            const formattedAmount = Number(RequestedAmount).toLocaleString('en-US');
+            
+            // Create cells
+            tr.innerHTML = `
+                <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${Group}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${ID}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${Pro}</td>
+                <td class="px-3 py-4 text-sm text-gray-700">${InitiativeName}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-type="${RequestType}">${RequestType}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm">
+                    <div class="flex items-center space-x-2 btn-group">
+                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'Full')">Full</button>
+                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'None')">None</button>
+                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'Adjusted')">Adjusted</button>
+                        <input type="number" placeholder="Adjusted" class="adj-input hidden w-24 p-1 border border-gray-300 rounded-md text-sm shadow-inner" data-row-id="${RowID}" data-type="${RequestType}">
+                    </div>
+                </td>
+            `;
+            return tr;
+        }
+
+        /**
+         * Creates a table row for BPOG data.
+         * @param {Object} rowData - The object for a single row.
+         * @returns {HTMLElement} The created <tr> element.
+         */
+        function createBpogDataRow(rowData) {
+            const { ID, InitiativeName, Description, RequestedAmount, RowID } = rowData;
+            
+            const tr = document.createElement('tr');
+            tr.dataset.rowId = RowID;
+            tr.dataset.group = 'BPOG';
+            tr.dataset.description = Description;
+            
+            const formattedAmount = Number(RequestedAmount).toLocaleString('en-US');
+
+            tr.innerHTML = `
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${ID}</td>
+                <td class="px-3 py-4 text-sm text-gray-700">${InitiativeName}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm">
+                    <div class="flex items-center space-x-2 btn-group">
+                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'Full')">Full</button>
+                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'None')">None</button>
+                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'Adjusted')">Adjusted</button>
+                        <input type="number" placeholder="Adjusted" class="adj-input hidden w-24 p-1 border border-gray-300 rounded-md text-sm shadow-inner" data-row-id="${RowID}" data-type="BPOG">
+                    </div>
+                </td>
+            `;
+            return tr;
+        }
+
+
+        // --- INTERACTIVITY AND DATA MANAGEMENT ---
+
+        /**
+         * Sets the allocation status for a given row and type.
+         * @param {HTMLElement} button - The button that was clicked.
+         * @param {string} rowId - The unique ID of the table row.
+         * @param {string} type - The allocation type ('CAPEX', 'OPEX', 'BPOG').
+         * @param {string} status - The status ('Full', 'None', 'Adjusted').
+         */
+        function setStatus(button, rowId, type, status) {
+            const row = button.closest('tr');
+            if (!row) return;
+
+            const statusKey = `status${type}`;
+            const buttonGroup = button.parentElement;
+            const adjInput = buttonGroup.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='${type}']`);
+
+            // If clicking active button, deactivate
+            if (button.classList.contains('active')) {
+                delete row.dataset[statusKey];
+                button.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                button.classList.add('bg-gray-300');
+                if (adjInput) adjInput.classList.add('hidden');
+                return; // Exit
+            }
+
+            // Clear active state from sibling buttons
+            buttonGroup.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                if (!btn.classList.contains('bg-gray-300')) {
+                    btn.classList.add('bg-gray-300');
+                }
+            });
+
+            // Set active state on the clicked button
+            button.classList.add('active');
+            button.classList.remove('bg-gray-300');
+            if (status === 'Full') button.classList.add('btn-full');
+            if (status === 'None') button.classList.add('btn-none');
+            if (status === 'Adjusted') button.classList.add('btn-adj');
+
+            // Store status
+            row.dataset[statusKey] = status;
+
+            // Show/hide adjusted input
+            if (status === 'Adjusted') {
+                if (adjInput) adjInput.classList.remove('hidden');
+            } else {
+                if (adjInput) {
+                    adjInput.classList.add('hidden');
+                    // We don't clear the value, so user can toggle back
+                }
+            }
+        }
+
+        /**
+         * Gathers all data from the tables and exports it as a CSV file.
+         */
+        function exportCSV() {
+            const csvRows = [];
+            // Define headers
+            const headers = [
+                "Group", "ID", "Pro", "Trigger", "Initiative Name", "Description",
+                "Requested Amount", "Request Type",
+                "CAPEX Status", "OPEX Status", "BPOG Status",
+                "Adjusted CAPEX", "Adjusted OPEX", "Adjusted BPOG"
+            ];
+            csvRows.push(headers.join(','));
+
+            // Find all tables and process their rows
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const rowId = row.dataset.rowId;
+                
+                // Skip group header rows
+                if (row.classList.contains('group-header') || !rowId) return;
+
+                // Get static data from cells and data attributes
+                const group = row.dataset.group;
+                const pro = row.dataset.pro;
+                const trigger = row.dataset.trigger;
+                const description = row.dataset.description;
+                
+                let id, initiative, requestedAmount, requestType;
+
+                if (group === 'BPOG') {
+                    id = row.cells[0].innerText;
+                    initiative = row.cells[1].innerText;
+                    requestedAmount = row.cells[2].dataset.requestAmount;
+                    requestType = 'BPOG';
+                } else {
+                    id = row.cells[1].innerText;
+                    initiative = row.cells[3].innerText;
+                    requestedAmount = row.cells[4].dataset.requestAmount;
+                    requestType = row.cells[5].dataset.requestType;
+                }
+
+                // Get dynamic status data
+                const capexStatus = row.dataset.statusCAPEX || '';
+                const opexStatus = row.dataset.statusOPEX || '';
+                const bpogStatus = row.dataset.statusBPOG || '';
+
+                // Get adjusted values
+                let adjCapex = '';
+                let adjOpex = '';
+                let adjBpog = '';
+
+                if (capexStatus === 'Adjusted') {
+                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='CAPEX']`);
+                    if (input) adjCapex = input.value;
+                }
+                if (opexStatus === 'Adjusted') {
+                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='OPEX']`);
+                    if (input) adjOpex = input.value;
+                }
+                if (bpogStatus === 'Adjusted') {
+                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='BPOG']`);
+                    if (input) adjBpog = input.value;
+                }
+                
+                // Helper to escape commas in strings
+                const escape = (str) => `"${(str || '').replace(/"/g, '""')}"`;
+
+                const values = [
+                    escape(group),
+                    escape(id),
+                    escape(pro),
+                    escape(trigger),
+                    escape(initiative),
+                    escape(description),
+                    escape(requestedAmount),
+                    escape(requestType),
+                    escape(capexStatus),
+                    escape(opexStatus),
+                    escape(bpogStatus),
+                    escape(adjCapex),
+                    escape(adjOpex),
+                    escape(adjBpog)
+                ].join(',');
+                
+                csvRows.push(values);
+            });
+
+            // Create and download the file
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            
+            const link = document.createElement('a');
+            if (link.download !== undefined) { // Feature detection
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'funding_feedback_export.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        /**
+         * Saves all current inputs and selections to localStorage.
+         */
+        function saveProgress() {
+            const data = {};
+            document.querySelectorAll('tbody tr[data-row-id]').forEach(row => {
+                const rowId = row.dataset.rowId;
+                const rowData = {};
+                
+                if (row.dataset.statusCAPEX) rowData.statusCAPEX = row.dataset.statusCAPEX;
+                if (row.dataset.statusOPEX) rowData.statusOPEX = row.dataset.statusOPEX;
+                if (row.dataset.statusBPOG) rowData.statusBPOG = row.dataset.statusBPOG;
+
+                const inputs = row.querySelectorAll('.adj-input');
+                inputs.forEach(input => {
+                    if (input.value) {
+                        rowData[`adj${input.dataset.type}`] = input.value;
+                    }
+                });
+
+                if (Object.keys(rowData).length > 0) {
+                    data[rowId] = rowData;
+                }
+            });
+
+            localStorage.setItem('fundingFeedback', JSON.stringify(data));
+            
+            // Show toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-x-[120%]');
+            setTimeout(() => {
+                toast.classList.add('translate-x-[120%]');
+            }, 2000);
+        }
+
+        /**
+         * Loads progress from localStorage on page load.
+         * This function is called AFTER the table is rendered by loadDataFromCSV.
+         */
+        function loadProgress() {
+            const data = JSON.parse(localStorage.getItem('fundingFeedback'));
+            if (!data) return;
+
+            for (const rowId in data) {
+                const rowData = data[rowId];
+                const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+                if (!row) continue;
+
+                // Restore statuses by simulating a click
+                if (rowData.statusCAPEX) {
+                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'CAPEX', '${rowData.statusCAPEX}'"]`);
+                    if (btn) btn.click();
+                }
+                if (rowData.statusOPEX) {
+                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'OPEX', '${rowData.statusOPEX}'"]`);
+                    if (btn) btn.click();
+                }
+                if (rowData.statusBPOG) {
+                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'BPOG', '${rowData.statusBPOG}'"]`);
+                    if (btn) btn.click();
+                }
+
+                // Restore adjusted values
+                if (rowData.adjCAPEX) {
+                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='CAPEX']`);
+                    if (input) input.value = rowData.adjCAPEX;
+                }
+                if (rowData.adjOPEX) {
+                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='OPEX']`);
+                    if (input) input.value = rowData.adjOPEX;
+                }
+                if (rowData.adjBPOG) {
+                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='BPOG']`);
+                    if (input) input.value = rowData.adjBPOG;
+                }
+            }
+        }
+
+        /**
+         * Sets up event listeners for the 'Clear All' modal.
+         */
+        function setupModal() {
+            const clearModal = document.getElementById('clearModal');
+            const clearBtn = document.getElementById('clearBtn');
+            const cancelClear = document.getElementById('cancelClear');
+            const confirmClear = document.getElementById('confirmClear');
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    clearModal.classList.remove('hidden');
+                });
+            }
+
+            if (cancelClear) {
+                cancelClear.addEventListener('click', () => {
+                    clearModal.classList.add('hidden');
+                });
+            }
+
+            if (confirmClear) {
+                confirmClear.addEventListener('click', () => {
+                    localStorage.removeItem('fundingFeedback');
+                    clearModal.classList.add('hidden');
+                    location.reload();
+                });
+            }
+        }
+
+        // --- Attach Event Listeners ---
+
+        // Attach event listener to the export button
+        document.getElementById('exportBtn').addEventListener('click', exportCSV);
+        
+        // Attach save/clear listeners
+        document.getElementById('saveBtn').addEventListener('click', saveProgress);
+        setupModal(); // Sets up listeners for the clear button and modal
+
+        // Load data (which will then load progress)
+        window.addEventListener('load', loadDataFromCSV);
+
+    </script>
+</body>
+</html>
+
+
