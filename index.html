@@ -100,43 +100,14 @@
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
-                                </tr>
-                            </thead>
-                            <!-- Body will be populated by JavaScript -->
-                            <tbody id="functional-tbody" class="bg-white divide-y divide-gray-200">
-                                <!-- Example of loading state -->
-                                <tr>
-                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading functional data...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </details>
-
-            <!-- Section 2: Divisional Funding Request (Moved up) -->
-            <details class="mb-4" open>
-                <summary class="text-2xl font-semibold text-gray-800 cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
-                    Divisional Funding Requests
-                </summary>
-                <div class="p-4">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Group</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pro</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Committed (DKK)</th>
                                 </tr>
                             </thead>
                             <!-- Body will be populated by JavaScript -->
                             <tbody id="divisional-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Example of loading state -->
                                 <tr>
-                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading divisional data...</td>
+                                    <td colspan="8" class="p-6 text-center text-gray-500">Loading divisional data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -161,12 +132,14 @@
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (DKK)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Committed (DKK)</th>
                                 </tr>
                             </thead>
                             <!-- Body will be populated by JavaScript -->
                             <tbody id="other-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Example of loading state -->
                                 <tr>
-                                    <td colspan="7" class="p-6 text-center text-gray-500">Loading other data...</td>
+                                    <td colspan="8" class="p-6 text-center text-gray-500">Loading other data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -188,12 +161,14 @@
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requested (BPOG Hours)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Allocation Status</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Committed (Hours)</th>
                                 </tr>
                             </thead>
                             <!-- Body will be populated by JavaScript -->
                             <tbody id="bpog-tbody" class="bg-white divide-y divide-gray-200">
+                                <!-- Example of loading state -->
                                 <tr>
-                                    <td colspan="4" class="p-6 text-center text-gray-500">Loading BPOG data...</td>
+                                    <td colspan="5" class="p-6 text-center text-gray-500">Loading BPOG data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -216,6 +191,30 @@
             </button>
         </footer>
 
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <h3 id="modalTitle" class="text-xl font-semibold text-gray-900 mb-4">Provide Feedback</h3>
+            
+            <!-- Hidden inputs to store context -->
+            <input type="hidden" id="modalRowId">
+            <input type="hidden" id="modalStatus">
+
+            <div id="modalAmountSection" class="mb-4 hidden">
+                <label for="modalAmountInput" class="block text-sm font-medium text-gray-700">Adjusted Amount</label>
+                <input type="number" id="modalAmountInput" placeholder="Enter new amount" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div id="modalCommentSection" class="mb-6">
+                <label for="modalCommentInput" class="block text-sm font-medium text-gray-700">Comment (Optional)</label>
+                <textarea id="modalCommentInput" rows="3" placeholder="Add a comment..." class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="modalCancelBtn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button id="modalSaveBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Save Feedback</button>
+            </div>
+        </div>
     </div>
 
     <!-- Clear Confirmation Modal -->
@@ -297,8 +296,8 @@
                 // Display error in all tables
                 document.getElementById('functional-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data from ${csvUrl}.</td></tr>`;
                 document.getElementById('divisional-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
-                document.getElementById('other-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
-                document.getElementById('bpog-tbody').innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
+                document.getElementById('other-tbody').innerHTML = `<tr><td colspan="8" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
+                document.getElementById('bpog-tbody').innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
             }
         }
 
@@ -337,7 +336,7 @@
                 // Add group header row if the group changes
                 if (currentGroups[Section] !== Group) {
                     currentGroups[Section] = Group;
-                    const groupHeader = createGroupHeaderRow(Group, 7, Section === 'Functional' ? 'Function' : 'Division');
+                    const groupHeader = createGroupHeaderRow(Group, 8, Section === 'Functional' ? 'Function' : 'Division');
                     tbody.appendChild(groupHeader);
                 }
 
@@ -375,6 +374,8 @@
             tr.dataset.pro = Pro;
             tr.dataset.trigger = Trigger;
             tr.dataset.description = Description;
+            tr.dataset.requestType = RequestType; // Store type for later
+            tr.dataset.requestedAmount = RequestedAmount; // Store amount for later
 
             // Format requested amount
             const formattedAmount = Number(RequestedAmount).toLocaleString('en-US');
@@ -389,12 +390,12 @@
                 <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-type="${RequestType}">${RequestType}</td>
                 <td class="px-3 py-4 whitespace-nowrap text-sm">
                     <div class="flex items-center space-x-2 btn-group">
-                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'Full')">Full</button>
-                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'None')">None</button>
-                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="setStatus(this, '${RowID}', '${RequestType}', 'Adjusted')">Adjusted</button>
-                        <input type="number" placeholder="Adjusted" class="adj-input hidden w-24 p-1 border border-gray-300 rounded-md text-sm shadow-inner" data-row-id="${RowID}" data-type="${RequestType}">
+                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', 'Full')">Full</button>
+                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="openFeedbackModal(this, '${RowID}', 'None')">None</button>
+                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="openFeedbackModal(this, '${RowID}', 'Adjusted')">Adjusted</button>
                     </div>
                 </td>
+                <td class="committed-cell px-3 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">...</td>
             `;
             return tr;
         }
@@ -411,6 +412,8 @@
             tr.dataset.rowId = RowID;
             tr.dataset.group = 'BPOG';
             tr.dataset.description = Description;
+            tr.dataset.requestType = 'BPOG'; // Store type for later
+            tr.dataset.requestedAmount = RequestedAmount; // Store amount for later
             
             const formattedAmount = Number(RequestedAmount).toLocaleString('en-US');
 
@@ -420,12 +423,12 @@
                 <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
                 <td class="px-3 py-4 whitespace-nowrap text-sm">
                     <div class="flex items-center space-x-2 btn-group">
-                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'Full')">Full</button>
-                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'None')">None</button>
-                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="setStatus(this, '${RowID}', 'BPOG', 'Adjusted')">Adjusted</button>
-                        <input type="number" placeholder="Adjusted" class="adj-input hidden w-24 p-1 border border-gray-300 rounded-md text-sm shadow-inner" data-row-id="${RowID}" data-type="BPOG">
+                        <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" onclick="setStatus(this, '${RowID}', 'Full')">Full</button>
+                        <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" onclick="openFeedbackModal(this, '${RowID}', 'None')">None</button>
+                        <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" onclick="openFeedbackModal(this, '${RowID}', 'Adjusted')">Adjusted</button>
                     </div>
                 </td>
+                <td class="committed-cell px-3 py-4 whitespace-nowrap text-sm text-gray-900 font-medium text-right">...</td>
             `;
             return tr;
         }
@@ -434,26 +437,25 @@
         // --- INTERACTIVITY AND DATA MANAGEMENT ---
 
         /**
-         * Sets the allocation status for a given row and type.
+         * Sets the allocation status for "Full" or for deactivation.
          * @param {HTMLElement} button - The button that was clicked.
          * @param {string} rowId - The unique ID of the table row.
-         * @param {string} type - The allocation type ('CAPEX', 'OPEX', 'BPOG').
-         * @param {string} status - The status ('Full', 'None', 'Adjusted').
+         * @param {string} status - The status ('Full').
          */
-        function setStatus(button, rowId, type, status) {
+        function setStatus(button, rowId, status) {
             const row = button.closest('tr');
             if (!row) return;
 
-            const statusKey = `status${type}`;
             const buttonGroup = button.parentElement;
-            const adjInput = buttonGroup.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='${type}']`);
 
-            // If clicking active button, deactivate
+            // If clicking active "Full" button, deactivate
             if (button.classList.contains('active')) {
-                delete row.dataset[statusKey];
-                button.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                delete row.dataset.status;
+                row.dataset.adjustedAmount = '';
+                row.dataset.comment = '';
+                button.classList.remove('active', 'btn-full');
                 button.classList.add('bg-gray-300');
-                if (adjInput) adjInput.classList.add('hidden');
+                updateCommittedColumn(row, null);
                 return; // Exit
             }
 
@@ -466,25 +468,153 @@
             });
 
             // Set active state on the clicked button
-            button.classList.add('active');
+            button.classList.add('active', 'btn-full');
             button.classList.remove('bg-gray-300');
-            if (status === 'Full') button.classList.add('btn-full');
-            if (status === 'None') button.classList.add('btn-none');
-            if (status === 'Adjusted') button.classList.add('btn-adj');
 
-            // Store status
-            row.dataset[statusKey] = status;
+            // Store status and clear other data
+            row.dataset.status = status;
+            row.dataset.adjustedAmount = '';
+            row.dataset.comment = '';
 
-            // Show/hide adjusted input
+            // Update committed column
+            updateCommittedColumn(row, status);
+        }
+
+        /**
+         * Opens the feedback modal for "Adjusted" or "None".
+         * @param {HTMLElement} button - The button that was clicked.
+         * @param {string} rowId - The unique ID of the table row.
+         * @param {string} status - The status ('None', 'Adjusted').
+         */
+        function openFeedbackModal(button, rowId, status) {
+            const row = button.closest('tr');
+            if (!row) return;
+
+            // Get modal elements
+            const modal = document.getElementById('feedbackModal');
+            const title = document.getElementById('modalTitle');
+            const amountSection = document.getElementById('modalAmountSection');
+            const amountInput = document.getElementById('modalAmountInput');
+            const commentInput = document.getElementById('modalCommentInput');
+            
+            // Store context
+            document.getElementById('modalRowId').value = rowId;
+            document.getElementById('modalStatus').value = status;
+
+            // Load existing data
+            amountInput.value = row.dataset.adjustedAmount || '';
+            commentInput.value = row.dataset.comment || '';
+
+            // Configure modal
             if (status === 'Adjusted') {
-                if (adjInput) adjInput.classList.remove('hidden');
-            } else {
-                if (adjInput) {
-                    adjInput.classList.add('hidden');
-                    // We don't clear the value, so user can toggle back
+                title.innerText = 'Adjusted Allocation Feedback';
+                amountSection.classList.remove('hidden');
+                commentInput.placeholder = 'Add a comment (Optional)';
+            } else if (status === 'None') {
+                title.innerText = 'No Allocation Feedback';
+                amountSection.classList.add('hidden');
+                commentInput.placeholder = 'Add a comment (Optional)';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        /**
+         * Saves the data from the modal and closes it.
+         */
+        function saveFeedback() {
+            const modal = document.getElementById('feedbackModal');
+            const rowId = document.getElementById('modalRowId').value;
+            const status = document.getElementById('modalStatus').value;
+            const adjustedAmount = document.getElementById('modalAmountInput').value;
+            const comment = document.getElementById('modalCommentInput').value;
+            
+            const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+            if (!row) return;
+
+            // Save data to row dataset
+            row.dataset.status = status;
+            row.dataset.comment = comment;
+            row.dataset.adjustedAmount = (status === 'Adjusted') ? adjustedAmount : '';
+
+            // Update UI
+            setActiveButton(row, status);
+            updateCommittedColumn(row, status, adjustedAmount);
+
+            // Close modal
+            modal.classList.add('hidden');
+        }
+
+        /**
+         * Cancels feedback and closes the modal.
+         */
+        function cancelFeedback() {
+            const modal = document.getElementById('feedbackModal');
+            modal.classList.add('hidden');
+            // Clear inputs
+            document.getElementById('modalAmountInput').value = '';
+            document.getElementById('modalCommentInput').value = '';
+            document.getElementById('modalRowId').value = '';
+            document.getElementById('modalStatus').value = '';
+        }
+
+        /**
+         * Visually activates the correct button in a row.
+         * @param {HTMLElement} row - The table row element.
+         * @param {string} status - The status ('Full', 'None', 'Adjusted').
+         */
+        function setActiveButton(row, status) {
+            if (!row) return;
+            const buttonGroup = row.querySelector('.btn-group');
+            if (!buttonGroup) return;
+
+            // Clear all active states
+            buttonGroup.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                if (!btn.classList.contains('bg-gray-300')) {
+                    btn.classList.add('bg-gray-300');
                 }
+            });
+
+            // Activate the target button
+            const statusClass = `btn-${status.toLowerCase()}`;
+            const targetBtn = buttonGroup.querySelector(`[onclick*="'${status}'"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active', statusClass);
+                targetBtn.classList.remove('bg-gray-300');
             }
         }
+
+        /**
+         * Updates the text of the "Committed" column for a row.
+         * @param {HTMLElement} row - The table row element.
+         * @param {string|null} status - The status ('Full', 'None', 'Adjusted', or null).
+         * @param {string|number} adjustedAmount - The adjusted amount, if any.
+         */
+        function updateCommittedColumn(row, status, adjustedAmount = 0) {
+            const cell = row.querySelector('.committed-cell');
+            if (!cell) return;
+
+            const requestedAmount = row.dataset.requestedAmount;
+            
+            let committedValue = '...';
+            let committedNumber = 0;
+
+            if (status === 'Full') {
+                committedNumber = Number(requestedAmount);
+            } else if (status === 'None') {
+                committedNumber = 0;
+            } else if (status === 'Adjusted') {
+                committedNumber = Number(adjustedAmount);
+            }
+
+            if (status) {
+                committedValue = committedNumber.toLocaleString('en-US');
+            }
+            
+            cell.innerText = committedValue;
+        }
+
 
         /**
          * Gathers all data from the tables and exports it as a CSV file.
@@ -495,8 +625,7 @@
             const headers = [
                 "Group", "ID", "Pro", "Trigger", "Initiative Name", "Description",
                 "Requested Amount", "Request Type",
-                "CAPEX Status", "OPEX Status", "BPOG Status",
-                "Adjusted CAPEX", "Adjusted OPEX", "Adjusted BPOG"
+                "Allocation Status", "Committed Amount", "Comment"
             ];
             csvRows.push(headers.join(','));
 
@@ -512,42 +641,32 @@
                 const pro = row.dataset.pro;
                 const trigger = row.dataset.trigger;
                 const description = row.dataset.description;
+                const requestType = row.dataset.requestType;
+                const requestedAmount = row.dataset.requestedAmount;
                 
-                let id, initiative, requestedAmount, requestType;
+                let id, initiative;
 
                 if (group === 'BPOG') {
                     id = row.cells[0].innerText;
                     initiative = row.cells[1].innerText;
-                    requestedAmount = row.cells[2].dataset.requestAmount;
-                    requestType = 'BPOG';
                 } else {
                     id = row.cells[1].innerText;
                     initiative = row.cells[3].innerText;
-                    requestedAmount = row.cells[4].dataset.requestAmount;
-                    requestType = row.cells[5].dataset.requestType;
                 }
 
                 // Get dynamic status data
-                const capexStatus = row.dataset.statusCAPEX || '';
-                const opexStatus = row.dataset.statusOPEX || '';
-                const bpogStatus = row.dataset.statusBPOG || '';
+                const status = row.dataset.status || '';
+                const adjustedAmount = row.dataset.adjustedAmount || '';
+                const comment = row.dataset.comment || '';
 
-                // Get adjusted values
-                let adjCapex = '';
-                let adjOpex = '';
-                let adjBpog = '';
-
-                if (capexStatus === 'Adjusted') {
-                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='CAPEX']`);
-                    if (input) adjCapex = input.value;
-                }
-                if (opexStatus === 'Adjusted') {
-                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='OPEX']`);
-                    if (input) adjOpex = input.value;
-                }
-                if (bpogStatus === 'Adjusted') {
-                    const input = document.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='BPOG']`);
-                    if (input) adjBpog = input.value;
+                // Calculate committed amount
+                let committedAmount = '';
+                if (status === 'Full') {
+                    committedAmount = requestedAmount;
+                } else if (status === 'None') {
+                    committedAmount = '0';
+                } else if (status === 'Adjusted') {
+                    committedAmount = adjustedAmount;
                 }
                 
                 // Helper to escape commas in strings
@@ -562,12 +681,9 @@
                     escape(description),
                     escape(requestedAmount),
                     escape(requestType),
-                    escape(capexStatus),
-                    escape(opexStatus),
-                    escape(bpogStatus),
-                    escape(adjCapex),
-                    escape(adjOpex),
-                    escape(adjBpog)
+                    escape(status),
+                    escape(committedAmount),
+                    escape(comment)
                 ].join(',');
                 
                 csvRows.push(values);
@@ -598,16 +714,9 @@
                 const rowId = row.dataset.rowId;
                 const rowData = {};
                 
-                if (row.dataset.statusCAPEX) rowData.statusCAPEX = row.dataset.statusCAPEX;
-                if (row.dataset.statusOPEX) rowData.statusOPEX = row.dataset.statusOPEX;
-                if (row.dataset.statusBPOG) rowData.statusBPOG = row.dataset.statusBPOG;
-
-                const inputs = row.querySelectorAll('.adj-input');
-                inputs.forEach(input => {
-                    if (input.value) {
-                        rowData[`adj${input.dataset.type}`] = input.value;
-                    }
-                });
+                if (row.dataset.status) rowData.status = row.dataset.status;
+                if (row.dataset.adjustedAmount) rowData.adjustedAmount = row.dataset.adjustedAmount;
+                if (row.dataset.comment) rowData.comment = row.dataset.comment;
 
                 if (Object.keys(rowData).length > 0) {
                     data[rowId] = rowData;
@@ -637,32 +746,16 @@
                 const row = document.querySelector(`tr[data-row-id='${rowId}']`);
                 if (!row) continue;
 
-                // Restore statuses by simulating a click
-                if (rowData.statusCAPEX) {
-                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'CAPEX', '${rowData.statusCAPEX}'"]`);
-                    if (btn) btn.click();
-                }
-                if (rowData.statusOPEX) {
-                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'OPEX', '${rowData.statusOPEX}'"]`);
-                    if (btn) btn.click();
-                }
-                if (rowData.statusBPOG) {
-                    const btn = row.querySelector(`.btn-group .btn[onclick*="'${rowId}', 'BPOG', '${rowData.statusBPOG}'"]`);
-                    if (btn) btn.click();
-                }
+                const status = rowData.status;
+                if (status) {
+                    // Restore data to dataset
+                    row.dataset.status = status;
+                    row.dataset.adjustedAmount = rowData.adjustedAmount || '';
+                    row.dataset.comment = rowData.comment || '';
 
-                // Restore adjusted values
-                if (rowData.adjCAPEX) {
-                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='CAPEX']`);
-                    if (input) input.value = rowData.adjCAPEX;
-                }
-                if (rowData.adjOPEX) {
-                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='OPEX']`);
-                    if (input) input.value = rowData.adjOPEX;
-                }
-                if (rowData.adjBPOG) {
-                    const input = row.querySelector(`.adj-input[data-row-id='${rowId}'][data-type='BPOG']`);
-                    if (input) input.value = rowData.adjBPOG;
+                    // Update UI
+                    setActiveButton(row, status);
+                    updateCommittedColumn(row, status, rowData.adjustedAmount);
                 }
             }
         }
@@ -704,6 +797,8 @@
         
         // Attach save/clear listeners
         document.getElementById('saveBtn').addEventListener('click', saveProgress);
+        document.getElementById('modalSaveBtn').addEventListener('click', saveFeedback);
+        document.getElementById('modalCancelBtn').addEventListener('click', cancelFeedback);
         setupModal(); // Sets up listeners for the clear button and modal
 
         // Load data (which will then load progress)
@@ -712,5 +807,7 @@
     </script>
 </body>
 </html>
+
+
 
 
