@@ -3,7 +3,8 @@
 // This wraps all logic to ensure the HTML is loaded before running
 document.addEventListener('DOMContentLoaded', () => {
 
-    const csvUrl = 'https://raw.githubusercontent.com/MadsBroder/DOR/main/funding_data.csv';
+    // UPDATED: Added a cache-busting query string to the CSV URL
+    const csvUrl = 'https://raw.githubusercontent.com/MadsBroder/DOR/main/funding_data.csv?_v=' + new Date().getTime();
     
     // --- Get DOM Elements ---
     const tbodies = {
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancelClear')?.addEventListener('click', () => {
         document.getElementById('clearModal').classList.add('hidden');
     });
-    document.getElementById('confirmClear')?.addEventListener('click', () => {
+        document.getElementById('confirmClear')?.addEventListener('click', () => {
         localStorage.removeItem('fundingFeedback');
         document.getElementById('clearModal').classList.add('hidden');
         location.reload();
@@ -90,55 +91,58 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {Array<Object>} An array of objects.
      */
     function parseCSV(csvText) {
+        // UPDATED: More robust parsing logic
         const lines = csvText.trim().split('\n');
-        // Handle potential carriage returns in headers
         const headers = lines[0].split(',').map(h => h.trim().replace(/\r/g, ''));
         const data = [];
+        
+        console.log("CSV Headers:", headers); // DEBUG
 
         for (let i = 1; i < lines.length; i++) {
-            // Fix for descriptions with commas
             const line = lines[i].trim();
-            if (line.length === 0) continue; // Skip empty lines
+            if (line.length === 0) continue;
 
             const obj = {};
-            let current = '';
-            let inQuote = false;
-            let fieldIndex = 0;
-            
-            for (let j = 0; j < line.length; j++) {
-                const char = line[j];
-                
-                if (char === '"' && !inQuote) {
-                    inQuote = true;
-                    continue;
-                }
-                if (char === '"' && inQuote) {
-                    if (line[j+1] === '"') {
-                        // This is an escaped quote ""
-                        current += '"';
-                        j++; // Skip next quote
-                    } else {
-                        // This is the end of the quote
-                        inQuote = false;
-                    }
-                    continue;
-                }
-                if (char === ',' && !inQuote) {
-                    // End of a field
-                    obj[headers[fieldIndex]] = current.trim();
-                    current = '';
-                    fieldIndex++;
-                    continue;
-                }
-                current += char;
-            }
-            // Add the last field
-            obj[headers[fieldIndex]] = current.trim();
+            let values;
 
-            if (Object.keys(obj).length === headers.length) {
+            try {
+                // This regex handles quoted fields, including escaped quotes
+                values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                
+                if (values.length > headers.length) {
+                    // This can happen if a non-quoted field has a comma. Try basic split.
+                    values = line.split(',');
+                }
+
+                if (values.length < headers.length) {
+                     // This can happen if trailing fields are empty. Try basic split.
+                    values = line.split(',');
+                }
+
+                // If still mismatched, log it and skip
+                if (values.length !== headers.length) {
+                    console.warn('Skipping malformed CSV line (column count mismatch):', `Expected ${headers.length}, got ${values.length}`, line);
+                    continue; // Skip this line
+                }
+
+                for (let j = 0; j < headers.length; j++) {
+                    let value = (values[j] || '').trim(); // Handle undefined values
+                    
+                    // Remove quotes if they are at the start and end
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.substring(1, value.length - 1);
+                    }
+                    
+                    // Replace escaped double quotes "" with a single "
+                    value = value.replace(/""/g, '"');
+                    
+                    obj[headers[j]] = value;
+                }
+
                 data.push(obj);
-            } else {
-                console.warn('Skipping malformed CSV line:', line, 'Header count:', headers.length, 'Object count:', Object.keys(obj).length, obj);
+
+            } catch (e) {
+                console.error("Error parsing CSV line:", i + 1, line, e);
             }
         }
         return data;
@@ -149,17 +153,23 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadDataFromCSV() {
         try {
+            console.log("Fetching CSV data from:", csvUrl); // DEBUG
             const response = await fetch(csvUrl);
             if (!response.ok) {
                 throw new Error(`Failed to fetch CSV: ${response.statusText}`);
             }
             const csvText = await response.text();
+            console.log("CSV data fetched successfully."); // DEBUG
+            
             const data = parseCSV(csvText);
-            
+            console.log("CSV parsing complete. Found", data.length, "rows."); // DEBUG
+
             renderTables(data);
-            
+            console.log("Table rendering complete."); // DEBUG
+
             // Now that tables are rendered, load any saved progress
             loadProgress();
+            console.log("Saved progress loaded."); // DEBUG
 
         } catch (error) {
             console.error("Error loading CSV data:", error);
@@ -194,12 +204,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tbodies.Functional) {
             tbodies.Functional.innerHTML = ''; // Clear loading
             currentGroup = null;
-            dataGroups.Functional.forEach(rowData => {
-                if (currentGroup !== rowData.Group) {
-                    currentGroup = rowData.Group;
-                    tbodies.Functional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Function'));
+            dataGroups.Functional.forEach((rowData, index) => {
+                try { // UPDATED: Added error handling for each row
+                    if (currentGroup !== rowData.Group) {
+                        currentGroup = rowData.Group;
+                        tbodies.Functional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Function'));
+                    }
+                    tbodies.Functional.appendChild(createDataRow(rowData));
+                } catch (e) {
+                    console.error("Failed to render Functional row", index, rowData, e);
                 }
-                tbodies.Functional.appendChild(createDataRow(rowData));
             });
         }
 
@@ -207,12 +221,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tbodies.Divisional) {
             tbodies.Divisional.innerHTML = ''; // Clear loading
             currentGroup = null;
-            dataGroups.Divisional.forEach(rowData => {
-                if (currentGroup !== rowData.Group) {
-                    currentGroup = rowData.Group;
-                    tbodies.Divisional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Division'));
+            dataGroups.Divisional.forEach((rowData, index) => {
+                try { // UPDATED: Added error handling for each row
+                    if (currentGroup !== rowData.Group) {
+                        currentGroup = rowData.Group;
+                        tbodies.Divisional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Division'));
+                    }
+                    tbodies.Divisional.appendChild(createDataRow(rowData));
+                } catch (e) {
+                    console.error("Failed to render Divisional row", index, rowData, e);
                 }
-                tbodies.Divisional.appendChild(createDataRow(rowData));
             });
         }
         
@@ -220,13 +238,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tbodies.Other) {
             tbodies.Other.innerHTML = ''; // Clear loading
             currentGroup = null;
-            dataGroups.Other.forEach(rowData => {
-                if (currentGroup !== rowData.Group) {
-                    currentGroup = rowData.Group;
-                    // Use FunctionalOwner for this group header if it exists, otherwise Group
-                    tbodies.Other.appendChild(createGroupHeaderRow(rowData.FunctionalOwner || currentGroup, 9, 'Group'));
+            dataGroups.Other.forEach((rowData, index) => {
+                try { // UPDATED: Added error handling for each row
+                    if (currentGroup !== rowData.Group) {
+                        currentGroup = rowData.Group;
+                        // Use FunctionalOwner for this group header if it exists, otherwise Group
+                        tbodies.Other.appendChild(createGroupHeaderRow(rowData.FunctionalOwner || currentGroup, 9, 'Group'));
+                    }
+                    tbodies.Other.appendChild(createDataRow(rowData));
+                } catch (e) {
+                    console.error("Failed to render Other row", index, rowData, e);
                 }
-                tbodies.Other.appendChild(createDataRow(rowData));
             });
         }
 
@@ -234,13 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tbodies.BPOG) {
             tbodies.BPOG.innerHTML = ''; // Clear loading
             currentGroup = null;
-            dataGroups.BPOG.forEach(rowData => {
-                // Use FunctionalOwner for this group header
-                if (currentGroup !== rowData.FunctionalOwner) {
-                    currentGroup = rowData.FunctionalOwner;
-                    tbodies.BPOG.appendChild(createGroupHeaderRow(currentGroup, 12, 'Function'));
+            dataGroups.BPOG.forEach((rowData, index) => {
+                try { // UPDATED: Added error handling for each row
+                    // Use FunctionalOwner for this group header
+                    if (currentGroup !== rowData.FunctionalOwner) {
+                        currentGroup = rowData.FunctionalOwner;
+                        tbodies.BPOG.appendChild(createGroupHeaderRow(currentGroup, 12, 'Function'));
+                    }
+                    tbodies.BPOG.appendChild(createBpogDataRow(rowData));
+                } catch (e) {
+                    console.error("Failed to render BPOG row", index, rowData, e);
                 }
-                tbodies.BPOG.appendChild(createBpogDataRow(rowData));
             });
         }
     }
@@ -918,3 +944,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 }); // End of DOMContentLoaded
+
+
+
