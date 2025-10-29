@@ -13,28 +13,25 @@
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-        /* Style for the <details> summary arrow */
-        summary {
-            list-style: none;
-            cursor: pointer;
+        /* NEW: Container for scrollable tables */
+        .table-container {
+            max-height: 70vh; /* Set a max height for the tables */
+            overflow-y: auto; /* Enable vertical scrolling */
+            position: relative; /* Needed for sticky headers */
         }
-        summary::-webkit-details-marker {
-            display: none;
-        }
-        summary::before {
-            content: '►';
-            margin-right: 0.5rem;
-            font-size: 0.8em;
-            transition: transform 0.2s ease-in-out;
-        }
-        details[open] summary::before {
-            transform: rotate(90deg);
+
+        /* NEW: Make table headers sticky */
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 20; /* Higher than group header */
+            background-color: #f3f4f6; /* bg-gray-100 */
         }
 
         /* Group header row */
         .group-header {
             position: sticky;
-            top: 0; /* Adjust this if you have a sticky navbar */
+            top: 52px; /* Adjust this to be just below your sticky thead */
             z-index: 10;
         }
 
@@ -72,7 +69,11 @@
 <body class="bg-gray-100">
 
     <!-- Changed max-w-7xl to max-w-screen-2xl for a wider view -->
-    <div class="container max-w-screen-2xl mx-auto p-6 md:p-10 bg-white rounded-lg shadow-2xl mt-8 mb-8">
+    <!-- Added 'relative' class for positioning the version number -->
+    <div class="container max-w-screen-2xl mx-auto p-6 md:p-10 bg-white rounded-lg shadow-2xl mt-8 mb-8 relative">
+
+        <!-- NEW: Version Number -->
+        <span class="absolute top-6 right-6 md:top-10 md:right-10 text-xs text-gray-400 font-mono">v1.0.0</span>
 
         <!-- Header -->
         <header class="border-b pb-4 mb-6">
@@ -91,7 +92,7 @@
                 <span class="inline-block px-2 py-0.5 bg-yellow-200 text-yellow-800 rounded-full mt-1">Adjusted allocation</span> = A different amount was approved. An input box will appear to enter the new amount.
             </p>
             <p class="mt-2">Your progress is saved in your browser. Use the <strong>Save Progress</strong> button to manually save. Use <strong>Clear All Input</strong> to reset the form.</p>
-            <p class="mt-2 font-semibold">Note: This page loads data from `funding_data.csv` located in your GitHub repository. If data fails to load, ensure the file is at the correct URL.</p>
+            <p class="mt-2 font-semibold">Note: This page loads data from <code class="bg-blue-100 p-1 rounded">funding_data.csv</code> located in your GitHub repository. If data fails to load, ensure the file is at the correct URL.</p>
         </div>
 
         <!-- Main Content -->
@@ -103,7 +104,8 @@
                     Functional Funding Requests
                 </summary>
                 <div class="p-4">
-                    <div class="overflow-x-auto">
+                    <!-- NEW: Added scrollable container -->
+                    <div class="table-container overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
@@ -136,7 +138,8 @@
                     Divisional Funding Requests
                 </summary>
                 <div class="p-4">
-                    <div class="overflow-x-auto">
+                    <!-- NEW: Added scrollable container -->
+                    <div class="table-container overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
@@ -169,7 +172,8 @@
                     Other Funding Requests
                 </summary>
                 <div class="p-4">
-                    <div class="overflow-x-auto">
+                    <!-- NEW: Added scrollable container -->
+                    <div class="table-container overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
@@ -202,7 +206,8 @@
                     Data Insights - BPOG
                 </summary>
                 <div class="p-4">
-                    <div class="overflow-x-auto">
+                    <!-- NEW: Added scrollable container -->
+                    <div class="table-container overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
@@ -309,7 +314,7 @@
     </div>
 
 
-    <script>
+        <script>
         // --- DATA LOADING AND RENDERING ---
 
         const csvUrl = 'https://raw.githubusercontent.com/MadsBroder/DOR/main/funding_data.csv'; // Fetches the raw CSV from your GitHub repo.
@@ -327,22 +332,47 @@
             const data = [];
 
             for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(','); // Simple split, assumes no commas in values
-                // More robust parser to handle commas inside quotes:
-                const regex = /(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)/g;
-                let match;
-                let j = 0;
+                // Fix for descriptions with commas
+                const line = lines[i];
                 const obj = {};
-                while (match = regex.exec(lines[i])) {
-                    let value = match[1].trim();
-                    if (value.startsWith('"') && value.endsWith('"')) {
-                        value = value.slice(1, -1).replace(/""/g, '"'); // Handle escaped quotes
+                let current = '';
+                let inQuote = false;
+                let fieldIndex = 0;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    
+                    if (char === '"' && !inQuote) {
+                        inQuote = true;
+                        continue;
                     }
-                    obj[headers[j]] = value;
-                    j++;
+                    if (char === '"' && inQuote) {
+                        if (line[j+1] === '"') {
+                            // This is an escaped quote ""
+                            current += '"';
+                            j++; // Skip next quote
+                        } else {
+                            // This is the end of the quote
+                            inQuote = false;
+                        }
+                        continue;
+                    }
+                    if (char === ',' && !inQuote) {
+                        // End of a field
+                        obj[headers[fieldIndex]] = current.trim();
+                        current = '';
+                        fieldIndex++;
+                        continue;
+                    }
+                    current += char;
                 }
+                // Add the last field
+                obj[headers[fieldIndex]] = current.trim();
+
                 if (Object.keys(obj).length === headers.length) {
                     data.push(obj);
+                } else {
+                    console.warn('Skipping malformed CSV line:', line);
                 }
             }
             return data;
@@ -368,7 +398,7 @@
             } catch (error) {
                 console.error("Error loading CSV data:", error);
                 // Display error in all tables
-                document.getElementById('functional-tbody').innerHTML = `<tr><td colspan="9" class="p-6 text-center text-red-500">Error: Could not load data from ${csvUrl}.</td></tr>`;
+                document.getElementById('functional-tbody').innerHTML = `<tr><td colspan="9" class="p-6 text-center text-red-500">Error: Could not load data. Check console and ensure the URL is correct: <br/><code class="text-xs">${csvUrl}</code></td></tr>`;
                 document.getElementById('divisional-tbody').innerHTML = `<tr><td colspan="9" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
                 document.getElementById('other-tbody').innerHTML = `<tr><td colspan="9" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
                 document.getElementById('bpog-tbody').innerHTML = `<tr><td colspan="12" class="p-6 text-center text-red-500">Error: Could not load data.</td></tr>`;
@@ -466,7 +496,7 @@
                 <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${ID}</td>
                 <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${PRIO}</td>
                 <td class="px-3 py-4 text-sm text-gray-700">${InitiativeName}</td>
-                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
+                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-right" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
                 <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-type="${RequestType}">${RequestType}</td>
                 <td class="px-3 py-4 whitespace-nowrap text-sm">
                     <div class="flex items-center space-x-2 btn-group">
@@ -712,6 +742,27 @@
          */
         function cancelFeedback() {
             const modal = document.getElementById('feedbackModal');
+            const rowId = document.getElementById('modalRowId').value;
+            const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+
+            if (row) {
+                // Revert UI to the last saved state from dataset
+                const savedStatus = row.dataset.status || null;
+                if (row.dataset.requestType === 'BPOG') {
+                    const amounts = {
+                        opex: row.dataset.adjustedOpex || 0,
+                        capex: row.dataset.adjustedCapex || 0,
+                        bpog: row.dataset.adjustedBpog || 0
+                    };
+                    updateBpogCommittedColumns(row, savedStatus, amounts);
+                } else {
+                    // Revert non-BPOG row
+                    const amount = row.dataset.adjustedAmount || 0;
+                    updateCommittedColumn(row, savedStatus, amount);
+                }
+            }
+
+            // Close modal
             modal.classList.add('hidden');
             // Clear inputs
             document.getElementById('modalAmountInput').value = '';
@@ -965,6 +1016,47 @@
                     location.reload();
                 });
             }
+
+            // --- NEW: Add live preview listeners to modal inputs ---
+            document.getElementById('modalOpexInput').addEventListener('input', previewBpogUpdate);
+            document.getElementById('modalCapexInput').addEventListener('input', previewBpogUpdate);
+            document.getElementById('modalBpogInput').addEventListener('input', previewBpogUpdate);
+            document.getElementById('modalAmountInput').addEventListener('input', previewNonBpogUpdate);
+        }
+
+        /**
+         * NEW: Live preview for BPOG modal inputs.
+         */
+        function previewBpogUpdate() {
+            const rowId = document.getElementById('modalRowId').value;
+            const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+            if (!row || row.dataset.requestType !== 'BPOG') return; 
+
+            const status = document.getElementById('modalStatus').value;
+            if (status !== 'Adjusted') return; // Only preview for 'Adjusted'
+            
+            const amounts = {
+                opex: document.getElementById('modalOpexInput').value,
+                capex: document.getElementById('modalCapexInput').value,
+                bpog: document.getElementById('modalBpogInput').value
+            };
+            
+            updateBpogCommittedColumns(row, 'Adjusted', amounts);
+        }
+
+        /**
+         * NEW: Live preview for non-BPOG modal inputs.
+         */
+        function previewNonBpogUpdate() {
+            const rowId = document.getElementById('modalRowId').value;
+            const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+            if (!row || row.dataset.requestType === 'BPOG') return;
+
+            const status = document.getElementById('modalStatus').value;
+            if (status !== 'Adjusted') return; // Only preview for 'Adjusted'
+
+            const amount = document.getElementById('modalAmountInput').value;
+            updateCommittedColumn(row, 'Adjusted', amount);
         }
 
         /**
@@ -1017,7 +1109,7 @@
                 // Get cell text content, fallback to dataset
                 let initiativeName = (section === 'BPOG' ? row.cells[3] : row.cells[3])?.innerText;
                 let id = (section === 'BPOG' ? row.cells[1] : row.cells[1])?.innerText;
-                let pro = (section === 'BPOG' ? row.cells[2] : row.cells[2])?.innerText;
+                let prio = (section === 'BPOG' ? row.cells[2] : row.cells[2])?.innerText;
 
                 // Initialize all fields as blank
                 let csvRow = {
@@ -1025,7 +1117,7 @@
                     Section: section,
                     Group: rowData.group || '',
                     ID: id || '',
-                    PRIO: pro || rowData.pro || '',
+                    PRIO: prio || rowData.pro || '',
                     Trigger: rowData.trigger || '',
                     InitiativeName: (initiativeName || '').replace(/"/g, '""'),
                     Description: (rowData.description || '').replace(/"/g, '""'),
@@ -1121,6 +1213,10 @@
     </script>
 </body>
 </html>
+
+
+
+
 
 
 
