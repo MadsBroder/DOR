@@ -7,11 +7,7 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!--
-    NEW: app.js is now loaded in the head with 'defer'.
-    This tells the browser to run it only after the HTML is fully parsed.
-    -->
-    <script src="app.js" defer></script>
+    <!-- No external app.js. All script is at the bottom of this file. -->
 
     <style>
         /* Custom styles for a professional look */
@@ -75,11 +71,11 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Set to 95% of viewport width -->
+        <!-- Set to 95% of viewport width -->
     <div class="container w-[95vw] mx-auto p-6 md:p-10 bg-white rounded-lg shadow-2xl mt-8 mb-8 relative">
 
         <!-- Version Number -->
-        <span class="absolute top-6 right-6 md:top-10 md:right-10 text-xs text-gray-400 font-mono">v1.0.10</span>
+        <span class="absolute top-6 right-6 md:top-10 md:right-10 text-xs text-gray-400 font-mono">v1.0.13</span>
 
         <!-- Header -->
         <header class="border-b pb-4 mb-6">
@@ -218,7 +214,7 @@
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">PRIO</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Initiative Name</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Req. OPEX (tDKK)</th>
-                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-60E0 uppercase tracking-wider">Adj. OPEX (tDKK)</th>
+                                    <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Adj. OPEX (tDKK)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Req. CAPEX (tDKK)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Adj. CAPEX (tDKK)</th>
                                     <th scope="col" class="py-3.5 px-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Req. BPOG (Hours)</th>
@@ -313,6 +309,963 @@
         Progress saved!
     </div>
 
+    <!-- 
+    ================================================================
+    APPLICATION JAVASCRIPT
+    All logic is now inline to prevent external loading issues.
+    ================================================================
+    -->
+    <script>
+        // --- DATA LOADING AND RENDERING ---
+
+        // This wraps all logic to ensure the HTML is loaded before running
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Added a cache-busting query string to the CSV URL
+            const csvUrl = 'https://raw.githubusercontent.com/MadsBroder/DOR/main/funding_data.csv?_v=' + new Date().getTime();
+            
+            // --- Get DOM Elements ---
+            const tbodies = {
+                Functional: document.getElementById('functional-tbody'),
+                Divisional: document.getElementById('divisional-tbody'),
+                Other: document.getElementById('other-tbody'),
+                BPOG: document.getElementById('bpog-tbody')
+            };
+
+            const modal = document.getElementById('feedbackModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalRowId = document.getElementById('modalRowId');
+            const modalStatus = document.getElementById('modalStatus');
+            // Modal Sections
+            const modalAmountSection = document.getElementById('modalAmountSection');
+            const modalOpexSection = document.getElementById('modalOpexSection');
+            const modalCapexSection = document.getElementById('modalCapexSection');
+            const modalBpogSection = document.getElementById('modalBpogSection');
+            // Modal Inputs
+            const modalAmountInput = document.getElementById('modalAmountInput');
+            const modalOpexInput = document.getElementById('modalOpexInput');
+            const modalCapexInput = document.getElementById('modalCapexInput');
+            const modalBpogInput = document.getElementById('modalBpogInput');
+            const modalCommentInput = document.getElementById('modalCommentInput');
+
+
+            // ---  Event Listeners ---
+            document.getElementById('saveBtn')?.addEventListener('click', saveProgress);
+            document.getElementById('exportBtn')?.addEventListener('click', exportCSV);
+            document.getElementById('clearBtn')?.addEventListener('click', () => {
+                document.getElementById('clearModal').classList.remove('hidden');
+            });
+            
+            // Modal Buttons
+            document.getElementById('modalSaveBtn')?.addEventListener('click', saveFeedback);
+            document.getElementById('modalCancelBtn')?.addEventListener('click', cancelFeedback);
+            document.getElementById('cancelClear')?.addEventListener('click', () => {
+                document.getElementById('clearModal').classList.add('hidden');
+            });
+            document.getElementById('confirmClear')?.addEventListener('click', () => {
+                localStorage.removeItem('fundingFeedback');
+                document.getElementById('clearModal').classList.add('hidden');
+                location.reload();
+            });
+
+            // Modal Live Preview Listeners
+            modalAmountInput?.addEventListener('input', previewNonBpogUpdate);
+            modalOpexInput?.addEventListener('input', previewBpogUpdate);
+            modalCapexInput?.addEventListener('input', previewBpogUpdate);
+            modalBpogInput?.addEventListener('input', previewBpogUpdate);
+
+
+            // --- NEW: Event Delegation for Table Clicks ---
+            // Add a single listener to each table body
+            for (const key in tbodies) {
+                if (tbodies[key]) {
+                    tbodies[key].addEventListener('click', handleTableClick);
+                }
+            }
+
+            /**
+             * Handles all clicks within the table bodies.
+             * @param {Event} e - The click event.
+             */
+            function handleTableClick(e) {
+                const button = e.target.closest('button.btn'); // Find the closest button
+                if (!button) return; // Click wasn't on a button
+
+                const rowId = button.dataset.rowId;
+                const status = button.dataset.status;
+                const action = button.dataset.action;
+
+                if (action === 'set-status') {
+                    setStatus(button, rowId, status);
+                } else if (action === 'open-modal') {
+                    openFeedbackModal(button, rowId, status);
+                }
+            }
+
+
+            /**
+             * Simple CSV parser
+             * @param {string} csvText - The raw CSV text.
+             * @returns {Array<Object>} An array of objects.
+             */
+            function parseCSV(csvText) {
+                // UPDATED: More robust parsing logic
+                const lines = csvText.trim().split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().replace(/\r/g, ''));
+                const data = [];
+                
+                console.log("CSV Headers:", headers); // DEBUG
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line.length === 0) continue;
+
+                    const obj = {};
+                    let values;
+
+                    try {
+                        // This regex handles quoted fields, including escaped quotes
+                        values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                        
+                        if (values.length > headers.length) {
+                            // This can happen if a non-quoted field has a comma. Try basic split.
+                            values = line.split(',');
+                        }
+
+                        if (values.length < headers.length) {
+                             // This can happen if trailing fields are empty. Try basic split.
+                            values = line.split(',');
+                        }
+
+                        // If still mismatched, log it and skip
+                        if (values.length !== headers.length) {
+                            console.warn('Skipping malformed CSV line (column count mismatch):', `Expected ${headers.length}, got ${values.length}`, line);
+                            continue; // Skip this line
+                        }
+
+                        for (let j = 0; j < headers.length; j++) {
+                            let value = (values[j] || '').trim(); // Handle undefined values
+                            
+                            // Remove quotes if they are at the start and end
+                            if (value.startsWith('"') && value.endsWith('"')) {
+                                value = value.substring(1, value.length - 1);
+                            }
+                            
+                            // Replace escaped double quotes "" with a single "
+                            value = value.replace(/""/g, '"');
+                            
+                            obj[headers[j]] = value;
+                        }
+
+                        data.push(obj);
+
+                    } catch (e) {
+                        console.error("Error parsing CSV line:", i + 1, line, e);
+                    }
+                }
+                return data;
+            }
+
+            /**
+             * Fetches and renders all data from the CSV.
+             */
+            async function loadDataFromCSV() {
+                try {
+                    console.log("Fetching CSV data from:", csvUrl); // DEBUG
+                    const response = await fetch(csvUrl);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch CSV: ${response.statusText}`);
+                    }
+                    const csvText = await response.text();
+                    console.log("CSV data fetched successfully."); // DEBUG
+                    
+                    const data = parseCSV(csvText);
+                    console.log("CSV parsing complete. Found", data.length, "rows."); // DEBUG
+
+                    renderTables(data);
+                    console.log("Table rendering complete."); // DEBUG
+
+                    // Now that tables are rendered, load any saved progress
+                    loadProgress();
+                    console.log("Saved progress loaded."); // DEBUG
+
+                } catch (error) {
+                    console.error("Error loading CSV data:", error);
+                    // Display error in all tables
+                    const errorMsg = `<tr><td colspan="12" class="p-6 text-center text-red-500">Error: Could not load data. Check console and ensure the URL is correct: <br/><code class="text-xs">${csvUrl}</code></td></tr>`;
+                    
+                    if (tbodies.Functional) tbodies.Functional.innerHTML = errorMsg.replace('colspan="12"', 'colspan="9"');
+                    if (tbodies.Divisional) tbodies.Divisional.innerHTML = errorMsg.replace('colspan="12"', 'colspan="9"');
+                    if (tbodies.Other) tbodies.Other.innerHTML = errorMsg.replace('colspan="12"', 'colspan="9"');
+                    if (tbodies.BPOG) tbodies.BPOG.innerHTML = errorMsg.replace('colspan="12"', 'colspan="12"');
+                }
+            }
+
+            /**
+             * Populates all tables from the parsed data.
+             * @param {Array<Object>} data - Array of row objects from CSV.
+             */
+            function renderTables(data) {
+                
+                // This is a safer way to manage table content
+                const dataGroups = { Functional: [], Divisional: [], Other: [], BPOG: [] };
+                
+                data.forEach(rowData => {
+                    if (dataGroups[rowData.Section]) {
+                        dataGroups[rowData.Section].push(rowData);
+                    }
+                });
+
+                let currentGroup = null;
+
+                // Render Functional
+                if (tbodies.Functional) {
+                    tbodies.Functional.innerHTML = ''; // Clear loading
+                    currentGroup = null;
+                    dataGroups.Functional.forEach((rowData, index) => {
+                        try { // Added error handling for each row
+                            if (currentGroup !== rowData.Group) {
+                                currentGroup = rowData.Group;
+                                tbodies.Functional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Function'));
+                            }
+                            tbodies.Functional.appendChild(createDataRow(rowData));
+                        } catch (e) {
+                            console.error("Failed to render Functional row", index, rowData, e);
+                        }
+                    });
+                }
+
+                // Render Divisional
+                if (tbodies.Divisional) {
+                    tbodies.Divisional.innerHTML = ''; // Clear loading
+                    currentGroup = null;
+                    dataGroups.Divisional.forEach((rowData, index) => {
+                        try { // Added error handling for each row
+                            if (currentGroup !== rowData.Group) {
+                                currentGroup = rowData.Group;
+                                tbodies.Divisional.appendChild(createGroupHeaderRow(currentGroup, 9, 'Division'));
+                            }
+                            tbodies.Divisional.appendChild(createDataRow(rowData));
+                        } catch (e) {
+                            console.error("Failed to render Divisional row", index, rowData, e);
+                        }
+                    });
+                }
+                
+                // Render Other
+                if (tbodies.Other) {
+                    tbodies.Other.innerHTML = ''; // Clear loading
+                    currentGroup = null;
+                    dataGroups.Other.forEach((rowData, index) => {
+                        try { // Added error handling for each row
+                            if (currentGroup !== rowData.Group) {
+                                currentGroup = rowData.Group;
+                                // Use FunctionalOwner for this group header if it exists, otherwise Group
+                                tbodies.Other.appendChild(createGroupHeaderRow(rowData.FunctionalOwner || currentGroup, 9, 'Group'));
+                            }
+                            tbodies.Other.appendChild(createDataRow(rowData));
+                        } catch (e) {
+                            console.error("Failed to render Other row", index, rowData, e);
+                        }
+                    });
+                }
+
+                // Render BPOG
+                if (tbodies.BPOG) {
+                    tbodies.BPOG.innerHTML = ''; // Clear loading
+                    currentGroup = null;
+                    dataGroups.BPOG.forEach((rowData, index) => {
+                        try { // Added error handling for each row
+                            // Use FunctionalOwner for this group header
+                            if (currentGroup !== rowData.FunctionalOwner) {
+                                currentGroup = rowData.FunctionalOwner;
+                                tbodies.BPOG.appendChild(createGroupHeaderRow(currentGroup, 12, 'Function'));
+                            }
+                            tbodies.BPOG.appendChild(createBpogDataRow(rowData));
+                        } catch (e) {
+                            console.error("Failed to render BPOG row", index, rowData, e);
+                        }
+                    });
+                }
+            }
+
+            /**
+             * Creates a sticky group header row.
+             * @param {string} groupName - The name of the group (e.g., "GEHS", "CBS").
+             * @param {number} colSpan - The number of columns to span.
+             * @param {string} type - The type prefix (e.g., "Function", "Division").
+             * @returns {HTMLElement} The created <tr> element.
+             */
+            function createGroupHeaderRow(groupName, colSpan, type) {
+                const tr = document.createElement('tr');
+                tr.className = 'group-header bg-gray-200';
+                tr.innerHTML = `<td colspan="${colSpan}" class="px-3 py-2 text-sm font-semibold text-gray-900">${type}: ${groupName}</td>`;
+                return tr;
+            }
+
+            /**
+             * Creates a table row for Functional, Divisional, or Other data.
+             * @param {Object} rowData - The object for a single row.
+             * @returns {HTMLElement} The created <tr> element.
+             */
+            function createDataRow(rowData) {
+                // Note: We ignore FunctionalOwner and Description as they are not in the v1.0.0 UI
+                const { Group, ID, PRIO, Trigger, InitiativeName, RequestedAmount, RequestType, RowID, FunctionalOwner } = rowData;
+                
+                const tr = document.createElement('tr');
+                // Set all data attributes for later use
+                tr.dataset.rowId = RowID;
+                tr.dataset.group = Group;
+                tr.dataset.prio = PRIO; 
+                tr.dataset.trigger = Trigger;
+                tr.dataset.initiativeName = InitiativeName; // Store initiative name
+                tr.dataset.requestType = RequestType; // Store type for later
+                tr.dataset.requestedAmount = RequestedAmount; // Store amount for later
+                tr.dataset.functionalOwner = FunctionalOwner; // Store this for export, even if not visible
+                tr.dataset.description = rowData.Description; // Store this for export, even if not visible
+                
+                // Format requested amount
+                const formattedAmount = Number(RequestedAmount).toLocaleString('en-US');
+                
+                // Create cells
+                tr.innerHTML = `
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${Group}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${ID}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${PRIO}</td>
+                    <td class="px-3 py-4 text-sm text-gray-700">${InitiativeName}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-right" data-request-amount="${RequestedAmount}">${formattedAmount}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500" data-request-type="${RequestType}">${RequestType}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm">
+                        <div class="flex items-center space-x-2 btn-group">
+                            <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" data-action="set-status" data-row-id="${RowID}" data-status="Full">Full</button>
+                            <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" data-action="open-modal" data-row-id="${RowID}" data-status="None">None</button>
+                            <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" data-action="open-modal" data-row-id="${RowID}" data-status="Adjusted">Adjusted</button>
+                        </div>
+                    </td>
+                    <td class="committed-cell px-3 py-4 whitespace-nowrap text-sm font-medium text-right">...</td>
+                    <td class="comment-cell px-3 py-4 text-sm text-gray-500"></td>
+                `;
+                return tr;
+            }
+
+            /**
+             * Creates a table row for BPOG data.
+             * @param {Object} rowData - The object for a single row.
+             * @returns {HTMLElement} The created <tr> element.
+             */
+            function createBpogDataRow(rowData) {
+                const { ID, PRIO, Group, InitiativeName, RequestedAmount, RequestedOPEX, RequestedCAPEX, RowID, FunctionalOwner } = rowData;
+                
+                const tr = document.createElement('tr');
+                tr.dataset.rowId = RowID;
+                tr.dataset.group = FunctionalOwner || Group; // Use FunctionalOwner for grouping, fallback to Group
+                tr.dataset.prio = PRIO; 
+                tr.dataset.initiativeName = InitiativeName; // Store initiative name
+                tr.dataset.requestType = 'BPOG'; // Store type for later
+                tr.dataset.requestedAmount = RequestedAmount || 0; // This is BPOG Hours
+                tr.dataset.requestedOpex = RequestedOPEX || 0;
+                tr.dataset.requestedCapex = RequestedCAPEX || 0;
+                tr.dataset.functionalOwner = FunctionalOwner; // Store this for export
+                tr.dataset.description = rowData.Description || ''; // Store this for export
+
+                const formattedAmount = Number(RequestedAmount || 0).toLocaleString('en-US');
+                const formattedOpex = Number(RequestedOPEX || 0).toLocaleString('en-US');
+                const formattedCapex = Number(RequestedCAPEX || 0).toLocaleString('en-US');
+
+                tr.innerHTML = `
+                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${FunctionalOwner || Group}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${ID}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">${PRIO}</td>
+                    <td class="px-3 py-4 text-sm text-gray-700">${InitiativeName}</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formattedOpex}</td>
+                    <td class="committed-opex-cell px-3 py-4 whitespace-nowrap text-sm font-medium text-right transition-colors duration-200">...</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formattedCapex}</td>
+                    <td class="committed-capex-cell px-3 py-4 whitespace-nowrap text-sm font-medium text-right transition-colors duration-200">...</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${formattedAmount}</td>
+                    <td class="committed-bpog-cell px-3 py-4 whitespace-nowrap text-sm font-medium text-right transition-colors duration-200">...</td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm">
+                        <div class="flex items-center space-x-2 btn-group">
+                            <button class="btn btn-full px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-green-500 transition" data-action="set-status" data-row-id="${RowID}" data-status="Full">Full</button>
+                            <button class="btn btn-none px-3 py-1 text-xs font-medium text-white rounded-full bg-gray-300 hover:bg-red-500 transition" data-action="open-modal" data-row-id="${RowID}" data-status="None">None</button>
+                            <button class="btn btn-adj px-3 py-1 text-xs font-medium text-gray-800 rounded-full bg-gray-300 hover:bg-yellow-400 transition" data-action="open-modal" data-row-id="${RowID}" data-status="Adjusted">Adjusted</button>
+                        </div>
+                    </td>
+                    <td class="comment-cell px-3 py-4 text-sm text-gray-500"></td>
+                `;
+                return tr;
+            }
+
+
+            /**
+             * Sets the allocation status for "Full" or for deactivation.
+             * @param {HTMLElement} button - The button that was clicked.
+             * @param {string} rowId - The unique ID of the table row.
+             * @param {string} status - The status ('Full').
+             */
+            function setStatus(button, rowId, status) {
+                const row = button.closest('tr');
+                if (!row) return;
+
+                const buttonGroup = button.parentElement;
+
+                // If clicking active "Full" button, deactivate
+                if (button.classList.contains('active')) {
+                    delete row.dataset.status;
+                    row.dataset.adjustedAmount = '';
+                    row.dataset.comment = '';
+                    // Clear BPOG-specific fields if they exist
+                    if (row.dataset.requestType === 'BPOG') {
+                        row.dataset.adjustedOpex = '';
+                        row.dataset.adjustedCapex = '';
+                        row.dataset.adjustedBpog = '';
+                    }
+                    button.classList.remove('active', 'btn-full');
+                    button.classList.add('bg-gray-300');
+                    
+                    // Update committed column(s)
+                    if (row.dataset.requestType === 'BPOG') {
+                        updateBpogCommittedColumns(row, null);
+                    } else {
+                        updateCommittedColumn(row, null);
+                    }
+                    updateCommentColumn(row, ''); // Clear comment
+                    return; // Exit
+                }
+
+                // Clear active state from sibling buttons
+                buttonGroup.querySelectorAll('.btn').forEach(btn => {
+                    btn.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                    if (!btn.classList.contains('bg-gray-300')) {
+                        btn.classList.add('bg-gray-300');
+                    }
+                });
+
+                // Set active state on the clicked button
+                button.classList.add('active', 'btn-full');
+                button.classList.remove('bg-gray-300');
+
+                // Store status and clear other data
+                row.dataset.status = status;
+                row.dataset.adjustedAmount = '';
+                row.dataset.comment = '';
+                // Clear BPOG-specific fields
+                if (row.dataset.requestType === 'BPOG') {
+                    row.dataset.adjustedOpex = '';
+                    row.dataset.adjustedCapex = '';
+                    row.dataset.adjustedBpog = '';
+                }
+
+                // Update committed column(s)
+                if (row.dataset.requestType === 'BPOG') {
+                    updateBpogCommittedColumns(row, status);
+                } else {
+                    updateCommittedColumn(row, status);
+                }
+                updateCommentColumn(row, ''); // Clear comment
+            }
+
+            /**
+             * Opens the feedback modal for "Adjusted" or "None".
+             * @param {HTMLElement} button - The button that was clicked.
+             * @param {string} rowId - The unique ID of the table row.
+             * @param {string} status - The status ('None', 'Adjusted').
+             */
+            function openFeedbackModal(button, rowId, status) {
+                const row = button.closest('tr');
+                if (!row) return;
+                
+                // Store context
+                modalRowId.value = rowId;
+                modalStatus.value = status;
+
+                // Load existing data
+                modalAmountInput.value = row.dataset.adjustedAmount || '';
+                modalOpexInput.value = row.dataset.adjustedOpex || '';
+                modalCapexInput.value = row.dataset.adjustedCapex || '';
+                modalBpogInput.value = row.dataset.adjustedBpog || '';
+                modalCommentInput.value = row.dataset.comment || '';
+
+                // Hide all amount sections by default
+                modalAmountSection.classList.add('hidden');
+                modalOpexSection.classList.add('hidden');
+                modalCapexSection.classList.add('hidden');
+                modalBpogSection.classList.add('hidden');
+
+                // Configure modal
+                if (status === 'Adjusted') {
+                    if (row.dataset.requestType === 'BPOG') {
+                        modalTitle.innerText = 'Adjusted BPOG Allocation';
+                        modalOpexSection.classList.remove('hidden');
+                        modalCapexSection.classList.remove('hidden');
+                        modalBpogSection.classList.remove('hidden');
+                    } else {
+                        modalTitle.innerText = 'Adjusted Allocation Feedback';
+                        modalAmountSection.classList.remove('hidden');
+                    }
+                    modalCommentInput.placeholder = 'Add a comment (Optional)';
+                } else if (status === 'None') {
+                    modalTitle.innerText = 'No Allocation Feedback';
+                    modalCommentInput.placeholder = 'Add a comment (Optional)';
+                }
+
+                modal.classList.remove('hidden');
+            }
+
+            /**
+             * Saves the data from the modal and closes it.
+             */
+            function saveFeedback() {
+                const rowId = modalRowId.value;
+                const status = modalStatus.value;
+                const comment = modalCommentInput.value;
+                
+                // Get all possible amount inputs
+                const adjustedAmount = modalAmountInput.value;
+                const opexAmount = modalOpexInput.value;
+                const capexAmount = modalCapexInput.value;
+                const bpogAmount = modalBpogInput.value;
+                
+                const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+                if (!row) return;
+
+                // Save data to row dataset
+                row.dataset.status = status;
+                row.dataset.comment = comment;
+
+                if (row.dataset.requestType === 'BPOG') {
+                    row.dataset.adjustedOpex = opexAmount;
+                    row.dataset.adjustedCapex = capexAmount;
+                    row.dataset.adjustedBpog = bpogAmount;
+                    row.dataset.adjustedAmount = ''; // Clear the old one
+                    
+                    // Update UI
+                    updateBpogCommittedColumns(row, status, { opex: opexAmount, capex: capexAmount, bpog: bpogAmount });
+                } else {
+                    row.dataset.adjustedAmount = adjustedAmount;
+                    row.dataset.adjustedOpex = ''; // Clear BPOG ones
+                    row.dataset.adjustedCapex = '';
+                    row.dataset.adjustedBpog = '';
+
+                    // Update UI
+                    updateCommittedColumn(row, status, adjustedAmount);
+                }
+                
+                setActiveButton(row, status);
+                updateCommentColumn(row, comment); // Update comment cell
+
+                // Close modal
+                modal.classList.add('hidden');
+            }
+
+            /**
+             * Cancels feedback and closes the modal.
+             */
+            function cancelFeedback() {
+                const rowId = modalRowId.value;
+                const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+
+                if (row) {
+                    // Revert UI to the last saved state from dataset
+                    const savedStatus = row.dataset.status || null;
+                    if (row.dataset.requestType === 'BPOG') {
+                        const amounts = {
+                            opex: row.dataset.adjustedOpex || 0,
+                            capex: row.dataset.adjustedCapex || 0,
+                            bpog: row.dataset.adjustedBpog || 0
+                        };
+                        updateBpogCommittedColumns(row, savedStatus, amounts);
+                    } else {
+                        // Revert non-BPOG row
+                        const amount = row.dataset.adjustedAmount || 0;
+                        updateCommittedColumn(row, savedStatus, amount);
+                    }
+                }
+
+                // Close modal
+                modal.classList.add('hidden');
+                // Clear inputs
+                modalAmountInput.value = '';
+                modalOpexInput.value = '';
+                modalCapexInput.value = '';
+                modalBpogInput.value = '';
+                modalCommentInput.value = '';
+                modalRowId.value = '';
+                modalStatus.value = '';
+            }
+
+            /**
+             * Visually activates the correct button in a row.
+             * @param {HTMLElement} row - The table row element.
+             * @param {string} status - The status ('Full', 'None', 'Adjusted').
+             */
+            function setActiveButton(row, status) {
+                if (!row) return;
+                const buttonGroup = row.querySelector('.btn-group');
+                if (!buttonGroup) return;
+
+                // Clear all active states
+                buttonGroup.querySelectorAll('.btn').forEach(btn => {
+                    btn.classList.remove('active', 'btn-full', 'btn-none', 'btn-adj');
+                    if (!btn.classList.contains('bg-gray-300')) {
+                        btn.classList.add('bg-gray-300');
+                    }
+                });
+
+                // Activate the target button
+                let statusClass = '';
+                if (status === 'Full') statusClass = 'btn-full';
+                else if (status === 'None') statusClass = 'btn-none';
+                else if (status === 'Adjusted') statusClass = 'btn-adj';
+                else return; // Don't do anything if status is unknown
+
+                const targetBtn = buttonGroup.querySelector(`[data-status='${status}']`);
+                if (targetBtn) {
+                    targetBtn.classList.add('active', statusClass);
+                    targetBtn.classList.remove('bg-gray-300');
+                }
+            }
+
+            /**
+             * Updates the text of the "Committed" column for a row.
+             * @param {HTMLElement} row - The table row element.
+             * @param {string|null} status - The status ('Full', 'None', 'Adjusted', or null).
+             * @param {string|number} adjustedAmount - The adjusted amount, if any.
+             */
+            function updateCommittedColumn(row, status, adjustedAmount = 0) {
+                const cell = row.querySelector('.committed-cell');
+                if (!cell) return;
+
+                const requestedAmount = row.dataset.requestedAmount;
+                
+                let committedValue = '...';
+                let committedNumber = 0;
+
+                if (status === 'Full') {
+                    committedNumber = Number(requestedAmount);
+                } else if (status === 'None') {
+                    committedNumber = 0;
+                } else if (status === 'Adjusted') {
+                    committedNumber = Number(adjustedAmount);
+                }
+
+                if (status) {
+                    committedValue = committedNumber.toLocaleString('en-US');
+                }
+                
+                cell.innerText = committedValue;
+            }
+
+            /**
+             * Updates the text of the "Committed" columns for a BPOG row.
+             * @param {HTMLElement} row - The table row element.
+             * @param {string|null} status - The status ('Full', 'None', 'Adjusted', or null).
+             * @param {Object} amounts - The adjusted amounts, if any {opex, capex, bpog}.
+             */
+            function updateBpogCommittedColumns(row, status, amounts = {}) {
+                const opexCell = row.querySelector('.committed-opex-cell');
+                const capexCell = row.querySelector('.committed-capex-cell');
+                const bpogCell = row.querySelector('.committed-bpog-cell');
+                if (!opexCell || !capexCell || !bpogCell) return;
+
+                // --- COLOR LOGIC ---
+                const colorClasses = {
+                    full: 'bg-green-50 text-green-800',
+                    none: 'bg-red-50 text-red-800',
+                    adj: 'bg-yellow-50 text-yellow-800',
+                    default: 'text-gray-900'
+                };
+                
+                [opexCell, capexCell, bpogCell].forEach(cell => {
+                    cell.classList.remove(...Object.values(colorClasses));
+                });
+
+                let newColorClass = colorClasses.default;
+                if (status === 'Full') {
+                    newColorClass = colorClasses.full;
+                } else if (status === 'None') {
+                    newColorClass = colorClasses.none;
+                } else if (status === 'Adjusted') {
+                    newColorClass = colorClasses.adj;
+                }
+                [opexCell, capexCell, bpogCell].forEach(cell => {
+                    cell.classList.add(newColorClass);
+                });
+                // --- END COLOR LOGIC ---
+
+                let opexVal = '...', capexVal = '...', bpogVal = '...';
+
+                if (status === 'Full') {
+                    opexVal = Number(row.dataset.requestedOpex).toLocaleString('en-US');
+                    capexVal = Number(row.dataset.requestedCapex).toLocaleString('en-US');
+                    bpogVal = Number(row.dataset.requestedAmount).toLocaleString('en-US'); // requestedAmount is BPOG for this row
+                } else if (status === 'None') {
+                    opexVal = '0'; capexVal = '0'; bpogVal = '0';
+                } else if (status === 'Adjusted') {
+                    opexVal = Number(amounts.opex || 0).toLocaleString('en-US');
+                    capexVal = Number(amounts.capex || 0).toLocaleString('en-US');
+                    bpogVal = Number(amounts.bpog || 0).toLocaleString('en-US');
+                }
+
+                opexCell.innerText = opexVal; 
+                capexCell.innerText = capexVal; 
+                bpogCell.innerText = bpogVal;
+            }
+
+            /**
+             * Updates the text of the "Comment" column for a row.
+             * @param {HTMLElement} row - The table row element.
+             * @param {string} comment - The comment text.
+             */
+            function updateCommentColumn(row, comment) {
+                const cell = row.querySelector('.comment-cell');
+                if (!cell) return;
+                const text = comment || '';
+                cell.innerText = text;
+                cell.title = text; // Set browser tooltip for long comments
+            }
+
+
+            /**
+             * Saves all current inputs and selections to localStorage.
+             */
+            function saveProgress() {
+                const data = {};
+                document.querySelectorAll('tbody tr[data-row-id]').forEach(row => {
+                    const rowId = row.dataset.rowId;
+                    const rowData = {};
+                    
+                    if (row.dataset.status) {
+                        rowData.status = row.dataset.status;
+                        if (row.dataset.requestType === 'BPOG') {
+                            if (row.dataset.adjustedOpex) rowData.adjustedOpex = row.dataset.adjustedOpex;
+                            if (row.dataset.adjustedCapex) rowData.adjustedCapex = row.dataset.adjustedCapex;
+                            if (row.dataset.adjustedBpog) rowData.adjustedBpog = row.dataset.adjustedBpog;
+                        } else {
+                            if (row.dataset.adjustedAmount) rowData.adjustedAmount = row.dataset.adjustedAmount;
+                        }
+                        if (row.dataset.comment) rowData.comment = row.dataset.comment;
+                    }
+
+                    if (Object.keys(rowData).length > 0) {
+                        data[rowId] = rowData;
+                    }
+                });
+
+                localStorage.setItem('fundingFeedback', JSON.stringify(data));
+                
+                // Show toast
+                const toast = document.getElementById('toast');
+                toast.classList.remove('translate-x-[120%]');
+                setTimeout(() => {
+                    toast.classList.add('translate-x-[120%]');
+                }, 2000);
+            }
+
+            /**
+             * Loads progress from localStorage on page load.
+             * This function is called AFTER the table is rendered by loadDataFromCSV.
+             */
+            function loadProgress() {
+                const data = JSON.parse(localStorage.getItem('fundingFeedback'));
+                if (!data) return;
+
+                for (const rowId in data) {
+                    const rowData = data[rowId];
+                    const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+                    if (!row) continue;
+
+                    const status = rowData.status;
+                    if (status) {
+                        // Restore data to dataset
+                        row.dataset.status = status;
+                        row.dataset.comment = rowData.comment || '';
+
+                        if (row.dataset.requestType === 'BPOG') {
+                            const amounts = {
+                                opex: rowData.adjustedOpex || 0,
+                                capex: rowData.adjustedCapex || 0,
+                                bpog: rowData.adjustedBpog || 0
+                            };
+                            row.dataset.adjustedOpex = amounts.opex;
+                            row.dataset.adjustedCapex = amounts.capex;
+                            row.dataset.adjustedBpog = amounts.bpog;
+                            updateBpogCommittedColumns(row, status, amounts);
+                        } else {
+                            const amount = rowData.adjustedAmount || 0;
+                            row.dataset.adjustedAmount = amount;
+                            updateCommittedColumn(row, status, amount);
+                        }
+                        
+                        // Update UI (common parts)
+                        setActiveButton(row, status);
+                        updateCommentColumn(row, rowData.comment); // Restore comment
+                    }
+                }
+            }
+
+            /**
+             * Live preview for BPOG modal inputs.
+             */
+            function previewBpogUpdate() {
+                const rowId = modalRowId.value;
+                const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+                if (!row || row.dataset.requestType !== 'BPOG') return; 
+
+                const status = modalStatus.value;
+                if (status !== 'Adjusted') return; // Only preview for 'Adjusted'
+                
+                const amounts = {
+                    opex: modalOpexInput.value,
+                    capex: modalCapexInput.value,
+                    bpog: modalBpogInput.value
+                };
+                
+                updateBpogCommittedColumns(row, 'Adjusted', amounts);
+            }
+
+            /**
+             * Live preview for non-BPOG modal inputs.
+             */
+            function previewNonBpogUpdate() {
+                const rowId = modalRowId.value;
+                const row = document.querySelector(`tr[data-row-id='${rowId}']`);
+                if (!row || row.dataset.requestType === 'BPOG') return;
+
+                const status = modalStatus.value;
+                if (status !== 'Adjusted') return; // Only preview for 'Adjusted'
+
+                const amount = modalAmountInput.value;
+                updateCommittedColumn(row, 'Adjusted', amount);
+            }
+
+            /**
+             * Gathers all data from the tables and exports it as a CSV file.
+             */
+            function exportCSV() {
+                const dataRows = document.querySelectorAll('tbody tr[data-row-id]');
+                let csvContent = "data:text/csv;charset=utf-8,";
+
+                // Define headers
+                const headers = [
+                    "RowID", "Section", "Group", "ID", "PRIO", "FunctionalOwner", "Trigger", "InitiativeName", "Description", 
+                    "RequestedAmount", "RequestType", "RequestedOPEX", "RequestedCAPEX", "Allocation Status", "Committed Amount", "Comment",
+                    "BPOG status", "CAPEX Status", "OPEX Status", 
+                    "Adjusted BPOG", "Adjusted CAPEX", "Adjusted OPEX"
+                ];
+                csvContent += headers.join(",") + "\n";
+
+                dataRows.forEach(row => {
+                    const rowData = row.dataset;
+                    // Determine section
+                    let section = 'Unknown';
+                    if (rowData.requestType === 'BPOG') section = 'BPOG';
+                    else if (tbodies.Functional.contains(row)) section = 'Functional';
+                    else if (tbodies.Divisional.contains(row)) section = 'Divisional';
+                    else if (tbodies.Other.contains(row)) section = 'Other';
+
+                    const status = rowData.status || 'Not Set';
+                    const comment = (rowData.comment || '').replace(/"/g, '""'); // Escape double quotes
+                    
+                    let requestedAmount = Number(rowData.requestedAmount);
+
+                    // Get cell text content, fallback to dataset
+                    let initiativeName = (rowData.initiativeName || '').replace(/"/g, '""');
+                    let id = row.cells[1]?.innerText || '';
+                    let prio = rowData.prio || '';
+                    let group = rowData.group || '';
+                    let funcOwner = rowData.functionalOwner || '';
+
+                    // Initialize all fields as blank
+                    let csvRow = {
+                        RowID: rowData.rowId,
+                        Section: section,
+                        Group: group,
+                        ID: id,
+                        PRIO: prio,
+                        FunctionalOwner: funcOwner,
+                        Trigger: rowData.trigger || '',
+                        InitiativeName: `"${initiativeName}"`,
+                        Description: `"${(rowData.description || '').replace(/"/g, '""')}"`, // Include from dataset
+                        RequestedAmount: requestedAmount,
+                        RequestType: rowData.requestType || '',
+                        RequestedOPEX: rowData.requestedOpex || '',
+                        RequestedCAPEX: rowData.requestedCapex || '',
+                        "Allocation Status": status,
+                        "Committed Amount": '', // This will be populated for non-BPOG
+                        "Comment": `"${comment}"`, // Wrap comments in quotes
+                        "BPOG status": '',
+                        "CAPEX Status": '',
+                        "OPEX Status": '',
+                        "Adjusted BPOG": '',
+                        "Adjusted CAPEX": '',
+                        "Adjusted OPEX": ''
+                    };
+                    
+                    // Populate specific fields based on type
+                    if (section === 'BPOG') {
+                        csvRow["BPOG status"] = status;
+                        csvRow["OPEX Status"] = status; // BPOG items can have OPEX/CAPEX
+                        csvRow["CAPEX Status"] = status;
+
+                        if (status === 'Full') {
+                            csvRow["Adjusted BPOG"] = rowData.requestedAmount || 0;
+                            csvRow["Adjusted OPEX"] = rowData.requestedOpex || 0;
+                            csvRow["Adjusted CAPEX"] = rowData.requestedCapex || 0;
+                        } else if (status === 'Adjusted') {
+                            csvRow["Adjusted BPOG"] = rowData.adjustedBpog || 0;
+                            csvRow["Adjusted OPEX"] = rowData.adjustedOpex || 0;
+                            csvRow["Adjusted CAPEX"] = rowData.adjustedCapex || 0;
+                        } else if (status === 'None') {
+                            csvRow["Adjusted BPOG"] = 0;
+                            csvRow["Adjusted OPEX"] = 0;
+                            csvRow["Adjusted CAPEX"] = 0;
+                        }
+                    } else {
+                        // This is for Functional, Divisional, Other
+                        let committedAmount = 0;
+                        if (status === 'Full') {
+                            committedAmount = requestedAmount;
+                        } else if (status === 'Adjusted') {
+                            committedAmount = Number(rowData.adjustedAmount) || 0;
+                        } else if (status === 'None') {
+                            committedAmount = 0;
+                        }
+                        
+                        csvRow["Committed Amount"] = (status === 'Not Set') ? '' : committedAmount;
+
+                        if (rowData.requestType === 'CAPEX') {
+                            csvRow["CAPEX Status"] = status;
+                            if (status === 'Full' || status === 'Adjusted' || status === 'None') {
+                                 csvRow["Adjusted CAPEX"] = committedAmount;
+                            }
+                        } else if (rowData.requestType === 'OPEX') {
+                            csvRow["OPEX Status"] = status;
+                             if (status === 'Full' || status === 'Adjusted' || status === 'None') {
+                                 csvRow["Adjusted OPEX"] = committedAmount;
+                            }
+                        }
+                    }
+                    
+                    // Add row to CSV
+                    const orderedRow = headers.map(header => csvRow[header]);
+                    csvContent += orderedRow.join(",") + "\n";
+                });
+
+                // Create and trigger download
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "funding_feedback_export.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // --- START THE APPLICATION ---
+            loadDataFromCSV();
+
+        }); // End of DOMContentLoaded
+    </script>
 </body>
 </html>
 
