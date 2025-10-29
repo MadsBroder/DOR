@@ -1,96 +1,99 @@
-Section,Group,ID,PRIO,Trigger,InitiativeName,Description,RequestedAmount,RequestType,RowID,RequestedOPEX,RequestedCAPEX,FunctionalOwner
-Functional,GEHS,65,9,Legal Compliance,EHS legal Compliance project,"Enhesa License for continued roll out and for implemented 2025 scope of countries.",2200,OPEX,F01,,,GEHS
-Functional,GQ,36,31,Functional Strategy Deployment & Must Win Battles,Quality Academy (AI),"Articulate Rise AI training creator. 1500 USD/year",13,OPEX,F02,,,GQ
-Functional,GQ,36,31,Functional Strategy Deployment & Must Win Battles,Quality Academy (AI),Synthesia licence,10,OPEX,F03,,,GQ
-Functional,GSC,128,16,Strategic Bet,Feasibility Strategy Allentown,"+ 10.000 euro for O8 planning tool from Service",75,OPEX,F04,,,GSC
-Functional,GSC,68,17,End of Life (EOL),Reporting and BW -> SAC,External consultant BI GSC Part,300,OPEX,F05,,,GSC
-Functional,GSC,89,20,Continued initiative approved last year,Agile VPC - process mining continuation and expansion,1 HC in Process Intelligence team in Group Supply chain,500,OPEX,F06,,,GSC
-Functional,GSC,30,83,Continued initiative approved last year,Strategic Planning Process - Capacity planning tool into SAP IBP,"Implement Consulting Group: SAP IBP Strategic Planning implementation. We have the license already so No new license fees.",1500,CAPEX,F07,,,GSC
-Functional,GP,69,6,Strategic Bet,Risk Assessment - Everstream,One-time implementation fee,895,CAPEX,F08,,,GP
-Functional,GP,69,6,Strategic Bet,Risk Assessment - Everstream,Subscription fee (yearly),1245,OPEX,F09,,,GP
-Functional,GP,70,10,End of Life (EOL),S2P continuation,Accenture Fee,300,CAPEX,F10,,,GP
-Functional,GP,70,10,End of Life (EOL),S2P continuation,Subscription 5.4M DKK,5600,OPEX,F11,,,GP
-Functional,GAME,121,4,Legal Compliance,OT Security & NIS2,"Compliance support: Introducing tools Hardware setup (test and verification); Deploy backup and recovery system; Training towards divisions",1200,OPEX,F12,,,GAME
-Functional,GAME,62,11,End of Life (EOL),BW -> SAC transformation,External consultants to support the transition,300,OPEX,F13,,,GAME
-Functional,GAME,119,22,Continued initiative approved last year,Traceability Implementation in Divisions,Support of solution roll-out,300,OPEX,F14,,,GAME
-Functional,GAME,51,29,Continued initiative approved last year,AI/AA Manufacturing Pool,In order to keep the catalogue active and running.,50,OPEX,F15,,,GAME
-Functional,GAME,99,32,Digital Operations Priority (short term impact),AI-powered MES data insight,Development of solution,300,OPEX,F16,,,GAME
-Functional,GAME,99,32,Digital Operations Priority (short term impact),AI-powered MES data insight,Support Maintenance of solution Technical support Updates,100,OPEX,F17,,,GAME
-Functional,GAME,118,35,Digital Operations Priority (Long term impact),IIOT Architecture - Unified Namespace,Funding any costs for building a demo in the project,300,OPEX,F18,,,GAME
-Functional,GAME,147,36,Digital Operations Priority (short term impact),Group AME Open Pool for Digital Innovation: AI Agents Advanced Robotics Al Vision,Innovation Pool,500,OPEX,F19,,,GAME
-Functional,GAME,41,39,Digital Operations Priority (Long term impact),Grundfos Equipment Engineering Standard for Connectivity Interface,"Design (purchase) PLC template connectivity template digital system template. Build sandbox for testing.",500,CAPEX,F20,,,GAME
-Functional,GAME,41,39,Digital Operations Priority (Long term impact),Grundfos Equipment Engineering Standard for Connectivity Interface,"Implement standard interfaces to a new equipment build interfaces for both PLC connectivity provide data transfer between production line and other digital systems like MES traceability other data solutions",200,OPEX,F21,,,GAME
-Functional,GROUP OPS,44,19,Continued initiative approved last year,Smart Performance Management Roll out,"Budget transfer for 1 Senior BI Developer in DK - based on IS Proxy.",800,OPEX,F22,,,GROUP OPS
-Functional,GROUP OPS,38,20,Continued initiative approved last year,Agile VPC - process mining continuation and expansion,"Celonis Quality Management Module. Scope: SAP QM related DATA 62.500€/year",470,OPEX,F23,,,GROUP OPS
-Divisional,CBS,193,15,End of Life (EOL),C3 Scape 2026 (Production PC Replacement),,1000,CAPEX,D01,,,CBS
-Divisional,CBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),Changshu (CBS) 10 User licenses,34,OPEX,D02,,,CBS
-Divisional,CBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),Sunderland (CBS) 10 User licenses,34,OPEX,D03,,,CBS
-Divisional,CBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),"X-Pick to Changshu (CBS) Deployment and Product pictures. Hardware: 4 Sets",475,CAPEX,D04,,,CBS
-Divisional,CBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),"X-Pick to Sunderland (CBS). Deployment and Product pictures. Hardware: 4 Sets",289,CAPEX,D05,,,CBS
-Divisional,CBS,105,28,Roll out of exsting digital solution,Artificial Intelligence - Manual process analysis,The cost of the investment should be financed by the factory where the implementation will be done.,500,CAPEX,D06,,,CBS
-Divisional,CBS,146,41,Digital Operations Priority (short term impact),GCB SSP,DC for staging out of GC,500,OPEX,D07,,,CBS
-Divisional,DBS,193,15,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),,1000,CAPEX,D08,,,DBS
-Divisional,DBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),Fresno DBS - 4 User licenses,26,OPEX,D09,,,DBS
-Divisional,DBS,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),"X-Pick to Fresno DBS. Deployment and Product pictures. Hardware: 2 Sets",193,CAPEX,D10,,,DBS
-Divisional,DBS,105,28,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,The cost of the investment will be financed by the factory where the implementation will be done.,500,CAPEX,D11,,,DBS
-Divisional,DBS,51,29,Continued initiative approved last year,AI/AA Manufacturing Pool,All divisions are open to request our solutions. The value represents development and setup,250,OPEX,D12,,,DBS
-Divisional,IND,193,15,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),,1000,CAPEX,D13,,,IND
-Divisional,IND,105,28,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,The cost of the investment should be financed by the factory where the implementation will be done.,500,CAPEX,D14,,,IND
-Divisional,WU,193,15,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),,1000,CAPEX,D15,,,WU
-Divisional,WU,105,28,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,The cost of the investment should be financed by the factory where the implementation will be done.,500,CAPEX,D16,,,WU
-Divisional,WU,196,42,Functional Strategy Deployment & Must Win Battles,New Zealand / Auckland Warehouse,IS Estimates,1000,CAPEX,D17,,,WU
-Divisional,GROUP COMP,193,15,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),Group Components,4000,CAPEX,D18,,,GROUP COMP
-Divisional,GROUP COMP,105,28,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,The cost of the investment should be financed by the factory where the implementation will be done.,500,CAPEX,D19,,,GROUP COMP
-Other,COO,140,1,End of Life (EOL),Transportation Management,According to strategic bet slide,8400,CAPEX,O01,,,Group Supply Chain
-Other,COO,140,1,End of Life (EOL),Transportation Management,As per strategic bet slide,3900,OPEX,O02,,,Group Supply Chain
-Other,COO,197,3,Strategic Bet,One Integrated Management system - Tool selection,One IMS,1000,CAPEX,O03,,,Group Quality
-Other,COO,189,7,Strategic Bet,MES,"Development of the platform incl. new features to further impact production lines. Central team to manage support and develop platform.",15000,OPEX,O04,,,Group AME
-Other,COO,189,7,Strategic Bet,MES,For approx. 20 new implementations and servers,15000,CAPEX,O05,,,Group AME
-Other,COO,144,8,End of Life (EOL),Extended Warehouse Management (End of life),Internal IS ressources,7100,CAPEX,O06,,,Group Supply Chain
-Other,COO,144,8,End of Life (EOL),Extended Warehouse Management (End of life),Mainly Westernacher support,500,OPEX,O07,,,Group Supply Chain
-Other,COO,114,12,End of Life (EOL),Ariba Forecasting & Inventory,External consultancy,2500,CAPEX,O08,,,Group Supply Chain
-Other,COO,114,12,End of Life (EOL),Ariba Forecasting & Inventory,"Subscription for Ariba Forecasting & Inventory. After Ariba Forecasting & Inventory implementation there is an expected saving of 0,5 million DKK when closing SNC.",2500,OPEX,O09,,,Group Supply Chain
-Other,COO,42,13,Legal Compliance,GTS CORE development (Compliance - Products Regulations),"BPOG Funding for External supplier (CIM). 2000 hours converted to cost",1200,OPEX,O10,,,Group AME
-Other,INNOVATION POOL,37,25,Digital Operations Priority (short term impact),AI embedded QIP system,License fee for AI solution to be included on the QIP.,300,OPEX,O11,,,Group Quality
-Other,INNOVATION POOL,63,37,Digital Operations Priority (Long term impact),Optix Connectivity Platform,"Optix Medium license subscription. Optix Small license subscription. License Packages: 5xmedium + 10xsmall Hardware: HW Medium (ex. Pick2Light + HW Small (Ex. sensors). Covering 5 medium sized and 10 small sized projects",650,OPEX,O12,,,Group AME
-Other,INVESTMENT POOLS,168,2,Strategic Bet,Global Operations Footprint,"IS hours from PM; MM PP LE SD Prod IT MDM",2000,OPEX,O13,,,Group OPS Strategy
-BPOG,Group AME,121,4,Legal Compliance,OT Security & NIS2,,400,BPOG,B04,1200,,Group AME
-BPOG,Group AME,189,7,Strategic Bet,MES,,300,BPOG,B13,15000,15000,Group AME
-BPOG,Group AME,62,11,End of Life (EOL),BW -> SAC transformation,,250,BPOG,B07,300,,Group AME
-BPOG,Group AME,42,13,Legal Compliance,GTS CORE development (Compliance - Products Regulations),,300,BPOG,B05,1200,,Group AME
-BPOG,Group AME,193,15,End of Life (EOL),C3 Scope 2026 (Production PC Replacement),,300,BPOG,B08,,8000,Group AME
-BPOG,Group AME,119,22,Continued initiative approved last year,Traceability Implementation in Divisions,,400,BPOG,B09,300,,Group AME
-BPOG,Group AME,51,29,Continued initiative approved last year,AI/AA Manufacturing Pool,,700,BPOG,B10,50,,Group AME
-BPOG,Group AME,99,32,Digital Operations Priority (short term impact),AI-powered MES data insight,,60,BPOG,B11,400,,Group AME
-BPOG,Group AME,118,35,IIOT Architecture - Unified Namespace,,1050,BPOG,B01,300,,Group AME
-BPOG,Group AME,147,36,Digital Operations Priority (short term impact),Group AME Open Pool for Digital Innovation: AI Agents Advanced Robotics AI Vision,,700,BPOG,B06,500,,Group AME
-BPOG,Group AME,63,37,Digital Operations Priority (Long term impact),Optix Connectivity Platform,,760,BPOG,B02,650,,Group AME
-BPOG,Group AME,41,39,Digital Operations Priority (Long term impact),Grundfos Equipment Engineering Standard for Connectivity Interface,,200,BPOG,B03,,500,Group AME
-BPOG,Group AME,91,43,Digital Operations Priority (Long term impact),Changshu Digital Lighthouse,,470,BPOG,B12,,,Group AME
-BPOG,Group AME,199,43,Factoris Data In Snowflake Auto Batch Creation Start/stop. PN,,900,BPOG,B14,200,,Group AME
-BPOG,Group CI,105,28,Roll out of existing digital solution,Artificial Intelligence - Manual process analysis,,100,BPOG,B15,,2500,Group CI
-BPOG,Group EHS,67,5,Strategic Bet,Real Time Environmental Monitoring Project 2025,,1190,BPOG,B17,,,Group EHS
-BPOG,Group EHS,65,9,Legal Compliance,EHS legal Compliance project,,700,BPOG,B16,2200,,Group EHS
-BPOG,Group Operations,44,19,Continued initiative approved last year,Smart Performance Management Roll out,,650,BPOG,B18,800,,Group Operations
-BPOG,Group Operations,115,26,Continued initiative approved last year,X-pick 2026 Implementation (Changshu Sunderland & Fresno DBS),,250,BPOG,B19,94,957,Group Operations
-BPOG,Group OPS Strategy,168,2,Strategic Bet,Global Operations Footprint,,2000,BPOG,B20,2000,,Group OPS Strategy
-BPOG,Group Purchasing,197,3,Strategic Bet,One Integrated Management system - Tool selection,,100,BPOG,B26,,1000,Group Purchasing
-BPOG,Group Purchasing,69,6,Strategic Bet,Risk Assessment - Everstream,,720,BPOG,B21,1245,895,Group Purchasing
-BPOG,Group Purchasing,70,10,End of Life (EOL),S2P continuation,,2000,BPOG,B22,5600,300,Group Purchasing
-BPOG,Group Purchasing,38,20,Continued initiative approved last year,Agile VPC - process mining continuation and expansion,,100,BPOG,B24,300,,Group Purchasing
-BPOG,Group Purchasing,186,21,Continued initiative approved last year,Tooling Management,,300,BPOG,B23,,,Group Purchasing
-BPOG,Group Purchasing,37,25,Digital Operations Priority (short term impact),AI embedded QIP system,,100,BPOG,B25,300,,Group Purchasing
-BPOG,Group Supply Chain,140,1,End of Life (EOL),Transportation Management,,6500,BPOG,B40,3900,8400,Group Supply Chain
-BPOG,Group Supply Chain,66,3,Continued initiative approved last year,AI in Planning,,850,BPOG,B28,,2500,Group Supply Chain
-BPOG,Group Supply Chain,144,8,End of Life (EOL),Extended Warehouse Management (End of life),,7000,BPOG,B31,500,7100,Group Supply Chain
-BPOG,Group Supply Chain,114,12,Continued initiative approved last year,Ariba Forecasting & Inventory,,1700,BPOG,B29,2500,2500,Group Supply Chain
-BPOG,Group Supply Chain,128,16,Strategic Bet,Feasibility Strategy Allentown,,900,BPOG,B32,75,,Group Supply Chain
-BPOG,Group Supply Chain,68,17,End of Life (EOL),Reporting and BW -> SAC,,250,BPOG,B37,300,,Group Supply Chain
-BPOG,Group Supply Chain,87,24,End of Life (EOL),Supply Chain Network Design Data Product,,300,BPOG,B39,500,,Group Supply Chain
-BPOG,Group Supply Chain,143,28,Continued initiative approved last year,Dangerous goods,,400,BPOG,B30,75,,Group Supply Chain
-BPOG,Group Supply Chain,89,30,Continued initiative approved last year,Strategic Planning Process - Capacity planning tool into SAP IBP,,200,BPOG,B38,,1500,Group Supply Chain
-BPOG,Group Supply Chain,117,33,Continued initiative approved last year,Order To Cash - CI via BPM,,400,BPOG,B36,,,Group Supply Chain
-BPOG,Group Supply Chain,109,34,Continued initiative approved last year,Advanced ATP checks used in order management process,,450,BPOG,B27,1700,,Group Supply Chain
-BPOG,Group Supply Chain,108,40,Continued initiative approved last year,Order Prioritization Supply Chain Constraint Process,,350,BPOG,B35,,,Group Supply Chain
-BPOG,Group Supply Chain,146,41,Digital Operations Priority (short term impact),GCB SSP,,500,BPOG,B33,,1000,Group Supply Chain
-BPOG,Group Supply Chain,196,42,Functional Strategy Deployment & Must Win Battles,New Zealand / Auckland Warehouse,,500,BPOG,B34,,1000,Group Supply Chain
+RowID,Section,Group,ID,PRIO,FunctionalOwner,Trigger,InitiativeName,Description,RequestedAmount,RequestType,RequestedOPEX,RequestedCAPEX
+F1,Functional,GEHS,65,9,GEHS,"Legal Compliance","EHS legal Compliance project","Enhesa License for continued roll out and for implemented 2025 scope of countries.",2200,OPEX,2200,0
+F2,Functional,GQ,36,31,GQ,"Functional Strategy Deployment & Must Win Battles","Quality Academy (AI)","Articulate Rise AI training creator. 1500 USD/year",10,OPEX,10,0
+F3,Functional,GQ,36,31,GQ,"Functional Strategy Deployment & Must Win Battles","Quality Academy (AI)","Synthesia licence",13,OPEX,13,0
+F4,Functional,GSC,128,16,GSC,"Strategic Bet","Feasibility Strategy Allentown","+ 10.000 euro for O8 planning tool from Service",75,OPEX,75,0
+F5,Functional,GSC,68,17,GSC,"End of Life (EOL)","Reporting and BW -> SAC","External consultant, BI GSC Part",300,OPEX,300,0
+F6,Functional,GSC,89,20,GSC,"Continued initiative approved last year","Agile VPC - process mining continuation and expansion","1 HC in Process Intelligence team in Group Supply chain",500,OPEX,500,0
+F7,Functional,GSC,89,30,GSC,"Continued initiative approved last year","Strategic Planning Process - Capacity planning tool into SAP IBP","Implement Consulting Group: SAP IBP Strategic Planning implementation. We have the license already, so No new license fees.",1500,CAPEX,0,1500
+F8,Functional,GP,69,6,GP,"Strategic Bet","Risk Assessment - Everstream","One-time implementation fee",895,CAPEX,0,895
+F9,Functional,GP,69,6,GP,"Strategic Bet","Risk Assessment - Everstream","Subscription fee (yearly)",1245,OPEX,1245,0
+F10,Functional,GP,70,10,GP,"End of Life (EOL)","S2P continuation","Accenture Fee",300,CAPEX,0,300
+F11,Functional,GP,70,10,GP,"End of Life (EOL)","S2P continuation","Subscription 5,4M DKK",5600,OPEX,5600,0
+F12,Functional,GAME,121,4,GAME,"Legal Compliance","OT Security & NIS2","Compliance support: Introducing tools; Hardware setup (test and verification); Deploy backup and recovery system; Training towards divisions",1200,OPEX,1200,0
+F13,Functional,GAME,62,11,GAME,"End of Life (EOL)","BW -> SAC transformation","External consultants to support the transition",300,OPEX,300,0
+F14,Functional,GAME,119,22,GAME,"Continued initiative approved last year","Traceability Implementation in Divisions","Support of solution roll-out",300,OPEX,300,0
+F15,Functional,GAME,51,29,GAME,"Continued initiative approved last year","AI/AA Manufacturing Pool","In order to keep the catalogue active and running.",50,OPEX,50,0
+F16,Functional,GAME,99,32,GAME,"Digital Operations Priority (short term impact)","AI-powered MES data insight","Development of solution",300,OPEX,300,0
+F17,Functional,GAME,99,32,GAME,"Digital Operations Priority (short term impact)","AI-powered MES data insight","Support, Maintenance of solution, Technical support, Updates",100,OPEX,100,0
+F18,Functional,GAME,118,35,GAME,"Digital Operations Priority (Long term impact)","IIOT Architecture - Unified Namespace","Funding any costs for building a demo in the project",300,OPEX,300,0
+F19,Functional,GAME,147,36,GAME,"Digital Operations Priority (short term impact)","Group AME Open Pool for Digital Innovation: AI Agents, Advanced Robotics, AI Vision","Innovation Pool",500,OPEX,500,0
+F20,Functional,GAME,41,39,GAME,"Digital Operations Priority (Long term impact)","Grundfos Equipment Engineering Standard for Connectivity Interface","Design (purchase) PLC template, connectivity template, digital system template. Build sandbox for testing.",500,CAPEX,0,500
+F21,Functional,GAME,41,39,GAME,"Digital Operations Priority (Long term impact)","Grundfos Equipment Engineering Standard for Connectivity Interface","Implement standard interfaces to a new equipment, build interfaces for both PLC, connectivity, provide data transfer between production line and other digital systems like MES, traceability, other data solutions",200,OPEX,200,0
+F22,Functional,GROUP OPS,44,19,GROUP OPS,"Continued initiative approved last year","Smart Performance Management Roll out","Budget transfer for 1 Senior BI Developer in DK - based on IS Proxy.",800,OPEX,800,0
+F23,Functional,GROUP OPS,38,20,GROUP OPS,"Continued initiative approved last year","Agile VPC process mining continuation and expansion","Celonis Quality Management Module. Scope: SAP QM related DATA 62.500€ / year",470,OPEX,470,0
+D1,Divisional,CBS,193,15,CBS,"End of Life (EOL)","C3 Scape 2026 (Production PC Replacement)","CBS",1000,CAPEX,0,1000
+D2,Divisional,CBS,115,26,CBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","Changshu (CBS) 10 User licenses",34,OPEX,34,0
+D3,Divisional,CBS,115,26,CBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","Sunderland (CBS) 10 User licenses",34,OPEX,34,0
+D4,Divisional,CBS,115,26,CBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","X-Pick to Changshu (CBS), Deployment and Product pictures. Hardware: 4 Sets",475,CAPEX,0,475
+D5,Divisional,CBS,115,26,CBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","X-Pick to Sunderland (CBS). Deployment and Product pictures. Hardware: 4 Sets",289,CAPEX,0,289
+D6,Divisional,CBS,105,28,CBS,"Roll out of exsting digital solution","Artificial Intelligence - Manual process analysis","The cost of the investment should be financed by the factory where the implementation will be done.",500,CAPEX,0,500
+D7,Divisional,CBS,146,41,CBS,"Digital Operations Priority (short term impact)","GCB SSP","DC for staging out of GCB",500,OPEX,500,0
+D8,Divisional,DBS,193,15,DBS,"End of Life (EOL)","C3 Scope 2026 (Production PC Replacement)","DBS",1000,CAPEX,0,1000
+D9,Divisional,DBS,115,26,DBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","Fresno DBS - 4 User licenses",26,OPEX,26,0
+D10,Divisional,DBS,115,26,DBS,"Continued initiative approved last year","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","X-Pick to Fresno DBS. Deployment and Product pictures. Hardware: 2 Sets",193,CAPEX,0,193
+D11,Divisional,DBS,105,28,DBS,"Roll out of existing digital solution","Artificial Intelligence - Manual process analysis","The cost of the investment will be financed by the factory where the implementation will be done.",500,CAPEX,0,500
+D12,Divisional,DBS,51,29,DBS,"Continued initiative approved last year","AI/AA Manufacturing Pool","All divisions are open to request our solutions. The value represents development and setup",250,OPEX,250,0
+D13,Divisional,IND,193,15,IND,"End of Life (EOL)","C3 Scope 2026 (Production PC Replacement)","IND",1000,CAPEX,0,1000
+D14,Divisional,IND,105,28,IND,"Roll out of existing digital solution","Artificial Intelligence - Manual process analysis","The cost of the investment should be financed by the factory where the implementation will be done.",500,CAPEX,0,500
+D15,Divisional,WU,193,15,WU,"End of Life (EOL)","C3 Scope 2026 (Production PC Replacement)","WU",1000,CAPEX,0,1000
+D16,Divisional,WU,105,28,WU,"Roll out of existing digital solution","Artificial Intelligence - Manual process analysis","The cost of the investment should be financed by the factory where the implementation will be done.",500,CAPEX,0,500
+D17,Divisional,WU,196,42,WU,"Functional Strategy Deployment & Must Win Battles","New Zealand / Auckland Warehouse","IS Estimates",1000,CAPEX,0,1000
+D18,Divisional,GROUP COMP,193,15,GROUP COMP,"End of Life (EOL)","C3 Scope 2026 (Production PC Replacement)","Group Components",4000,CAPEX,0,4000
+D19,Divisional,GROUP COMP,105,28,GROUP COMP,"Roll out of existing digital solution","Artificial Intelligence - Manual process analysis","The cost of the investment should be financed by the factory where the implementation will be done.",500,CAPEX,0,500
+O1,Other,COO,144,8,"Group Supply Chain","End of Life (EOL)","Extended Warehouse Management (End of life)","Internal IS ressources",7100,CAPEX,0,7100
+O2,Other,COO,140,1,"Group Supply Chain","End of Life (EOL)","Transportation Management","According to strategic bet slide",8400,CAPEX,0,8400
+O3,Other,COO,140,1,"Group Supply Chain","End of Life (EOL)","Transportation Management","As per strategic bet slide",3900,OPEX,3900,0
+O4,Other,COO,144,8,"Group Supply Chain","End of Life (EOL)","Extended Warehouse Management (End of life)","Mainly Westernacher support",500,OPEX,500,0
+O5,Other,COO,114,12,"Group Supply Chain","End of Life (EOL)","Ariba Forecasting & Inventory","External consultancy",2500,CAPEX,0,2500
+O6,Other,COO,114,12,"Group Supply Chain","End of Life (EOL)","Ariba Forecasting & Inventory","Subscription for Ariba Forecasting & Inventory. After Ariba Forecasting & Inventory implementation, there is an expected saving of 0,5 million DKK when closing SNC.",2500,OPEX,2500,0
+O7,Other,COO,189,7,"Group AME","Strategic Bet","MES","Development of the platform incl. new features to further impact production lines. Central team to manage, support and develop platform.",15000,OPEX,15000,0
+O8,Other,COO,189,7,"Group AME","Strategic Bet","MES","For approx. 20 new implementations and servers",15000,CAPEX,0,15000
+O9,Other,COO,42,13,"Group AME","Legal Compliance","GTS CORE development (Compliance - Products Regulations)","BPOG Funding for External supplier (CIM). 2000 hours converted to cost",1200,OPEX,1200,0
+O10,Other,COO,197,3,"Group Quality","Strategic Bet","One Integrated Management system - Tool selection","One IMS",1000,CAPEX,0,1000
+O11,Other,INNOVATION POOL,37,25,"Group Quality","Digital Operations Priority (short term impact)","AI embedded QIP system","License fee for AI solution to be included on the QIP.",300,OPEX,300,0
+O12,Other,INNOVATION POOL,63,37,"Group AME","Digital Operations Priority (Long term impact)","Optix Connectivity Platform","Optix Medium license subscription. Optix Small license subscription. License Packages: 5xmedium + 10xsmall. Hardware: HW Medium (ex. Pick2Light) + HW Small (Ex. sensors). Covering 5 medium sized and 10 small sized projects",650,OPEX,650,0
+O13,Other,INVESTMENT POOLS,168,2,"Group OPS Strategy","Strategic Bet","Global Operations Footprint","IS hours from PM; MM, PP, LE, SD, Prod IT, MDM",2000,OPEX,2000,0
+B1,BPOG,"Group Supply Chain",140,1,"Group Supply Chain","","Transportation Management","",6500,BPOG,3900,8400
+B2,BPOG,"Group Supply Chain",144,8,"Group Supply Chain","","Extended Warehouse Management (End of life)","",7000,BPOG,500,7100
+B3,BPOG,"Group Supply Chain",114,12,"Group Supply Chain","","Ariba Forecasting & Inventory","",1700,BPOG,2500,2500
+B4,BPOG,"Group Supply Chain",143,14,"Group Supply Chain","","Dangerous goods","",400,BPOG,0,0
+B5,BPOG,"Group Supply Chain",128,16,"Group Supply Chain","","Feasibility Strategy Allentown","",900,BPOG,75,0
+B6,BPOG,"Group Supply Chain",68,17,"Group Supply Chain","","Reporting and BW -> SAC","",250,BPOG,300,0
+B7,BPOG,"Group Supply Chain",187,18,"Group Supply Chain","","Win in US- One US Sales Company","",0,BPOG,0,0
+B8,BPOG,"Group Supply Chain",87,24,"Group Supply Chain","","Supply Chain Network Design Data Product","",300,BPOG,0,0
+B9,BPOG,"Group Supply Chain",89,30,"Group Supply Chain","","Strategic Planning Process - Capacity planning tool into SAP IBP","",200,BPOG,0,1500
+B10,BPOG,"Group Supply Chain",117,33,"Group Supply Chain","","Order To Cash - CI via BPM","",400,BPOG,0,0
+B11,BPOG,"Group Supply Chain",109,34,"Group Supply Chain","","Advanced ATP checks used in order management process","",450,BPOG,0,0
+B12,BPOG,"Group Supply Chain",66,38,"Group Supply Chain","","AI in Planning","",850,BPOG,0,0
+B13,BPOG,"Group Supply Chain",108,40,"Group Supply Chain","","Order Prioritization Supply Chain Constraint Process","",350,BPOG,0,0
+B14,BPOG,"Group Supply Chain",146,41,"Group Supply Chain","","GCB SSP","",800,BPOG,0,0
+B15,BPOG,"Group Supply Chain",196,42,"Group Supply Chain","","New Zealand / Auckland Warehouse","",0,BPOG,0,1000
+B16,BPOG,"Group AME",121,4,"Group AME","","OT Security & NIS2","",400,BPOG,1200,0
+B17,BPOG,"Group AME",189,7,"Group AME","","MES","",0,BPOG,15000,15000
+B18,BPOG,"Group AME",62,11,"Group AME","","BW SAC transformation","",250,BPOG,300,0
+B19,BPOG,"Group AME",42,13,"Group AME","","GTS CORE development (Compliance Products Regulations)","",0,BPOG,1200,0
+B20,BPOG,"Group AME",193,15,"Group AME","","C3 Scope 2026 (Production PC Replacement)","",0,BPOG,0,8000
+B21,BPOG,"Group AME",119,22,"Group AME","","Traceability Implementation in Divisions","",1000,BPOG,300,0
+B22,BPOG,"Group AME",91,27,"Group AME","","Factbird: Data in Snowflake, Auto Batch Creation, Start/stop, PN","",900,BPOG,0,0
+B23,BPOG,"Group AME",51,29,"Group AME","","AI/AA Manufacturing Pool","",60,BPOG,300,0
+B24,BPOG,"Group AME",99,32,"Group AME","","AI-powered MES data insight","",700,BPOG,400,0
+B25,BPOG,"Group AME",118,35,"Group AME","","IIOT Architecture - Unified Namespace","",1050,BPOG,300,0
+B26,BPOG,"Group AME",147,36,"Group AME","","Group AME Open Pool for Digital Innovation: AI Agents, Advanced Robotics, AI Vision","",700,BPOG,500,0
+B27,BPOG,"Group AME",63,37,"Group AME","","Optix Connectivity Platform","",760,BPOG,650,0
+B28,BPOG,"Group AME",41,39,"Group AME","","Grundfos Equipment Engineering Standard for Connectivity Interface","",0,BPOG,200,500
+B29,BPOG,"Group AME",199,43,"Group AME","","Changshu Digital Lighthouse","",470,BPOG,0,0
+B30,BPOG,"Group CI",105,28,"Group CI","","Artificial Intelligence - Manual process analysis","",100,BPOG,0,2500
+B31,BPOG,"Group EHS",67,5,"Group EHS","","OWM accounting","",700,BPOG,0,0
+B32,BPOG,"Group EHS",65,9,"Group EHS","","EHS legal Compliance project","",0,BPOG,2200,0
+B33,BPOG,"Group EHS",33,23,"Group EHS","","Real Time Environmental Monitoring project 2026","",1190,BPOG,0,0
+B34,BPOG,"Group Operations",44,19,"Group Operations","","Smart Performance Management Roll out","",650,BPOG,800,0
+B35,BPOG,"Group Operations",115,26,"Group Operations","","X-pick 2026 Implementation (Changshu, Sunderland & Fresno DBS)","",250,BPOG,94,957
+B36,BPOG,"Group OPS Strategy",168,2,"Group OPS Strategy","","Global Operations Footprint","",0,BPOG,2000,0
+B37,BPOG,"Group Purchasing",69,6,"Group Purchasing","","Risk Assessment - Everstream","",720,BPOG,1245,895
+B38,BPOG,"Group Purchasing",70,10,"Group Purchasing","","S2P continuation","",2000,BPOG,5600,300
+B39,BPOG,"Group Purchasing",188,21,"Group Purchasing","","Tooling Management","",300,BPOG,0,0
+B40,BPOG,"Group Quality",197,3,"Group Quality","","One Integrated Management system - Tool selection","",200,BPOG,0,1000
+B41,BPOG,"Group Quality",38,20,"Group Quality","","Agile VPC-process mining continuation and expansion","",100,BPOG,970,0
+B42,BPOG,"Group Quality",37,25,"Group Quality","","AI embedded QIP system","",100,BPOG,300,0
+B43,BPOG,"Group Quality",36,31,"Group Quality","","Quality Academy (AI)","",0,BPOG,23,0
